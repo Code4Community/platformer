@@ -1,7 +1,6 @@
-title: Platforming Game
------
+# Platforming Game
 
-# TODOs
+## TODOs
 
 + Decide on goals
 + Pick tools for development

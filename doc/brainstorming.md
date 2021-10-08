@@ -1,13 +1,12 @@
-title: Platform Game Brainstorming
------
+# Platform Game Brainstorming
 
-# Lesson Plan:
+## Lesson Plan:
 
 + Imperative Programming Concepts
 + Object-Oriented Programming Concepts
 + Functional Programming Concepts
 
-# References and Other Programming Games
+## References and Other Programming Games
 
 -   <https://www.blendogames.com/qc/>
     Normal Gameplay interspersed with “Programming”
@@ -18,9 +17,9 @@ title: Platform Game Brainstorming
     graphical functional programming. ClojureScript. I think lisps are good for
     children. Almost no syntax.
 
-# Game Types:
+## Game Types:
 
-## Category 1: Interact with Code at Beginning of Level
+### Category 1: Interact with Code at Beginning of Level
 
 Changing environment of Game
 
@@ -42,7 +41,7 @@ Changing level
   + Level 5: Use a loop
 + Part 4: Combining concepts + Functions
 
-## Category 2: Interact with code during normal gameplay
+### Category 2: Interact with code during normal gameplay
 
 Switching Between Mario and Programming – Thinking of Quadrilateral Cowboy
 
@@ -70,7 +69,7 @@ Possible Interfaces:
     power-up inheriting from a power-up class to modify the player in a new way.
   + ...
 
-# Game Elements:
+## Game Elements:
 
 Modify Power-Up Behavior with Code. Change positive increment to decrement.
 Monsters coming at player. Modify level with code to avoid monsters
