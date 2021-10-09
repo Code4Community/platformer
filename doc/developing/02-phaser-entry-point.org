@@ -1,0 +1,120 @@
+#+title: The Entry Point for a Phaser 3 Project
+#+author: Tassos Manganaris
+
+The entry point for this project is named "index.js" under the "src" directory.
+
+After a few imports, the file creates a [[https://photonstorm.github.io/phaser3-docs/Phaser.Types.Core.html#.GameConfig][GameConfig]] object. That object is then
+passed to the constructor for a [[https://photonstorm.github.io/phaser3-docs/Phaser.Game.html][Game]]. Most of the settings of the GameConfig are
+straightforward. The scene setting is the most interesting.
+
+* Phaser.Game Basics
+
+A Phaser.Game object includes an object called a [[https://photonstorm.github.io/phaser3-docs/Phaser.Scenes.SceneManager.html][SceneManager]]. It is
+"responsible for creating, processing, and updating all of the Scenes in a
+Game instance."
+
+What's a Scene?
+
+** [[https://photonstorm.github.io/phaser3-docs/Phaser.Scene.html][Phaser.Scene]] Basics
+
+A Phaser Game should have a scene for every meaningfully different view in the
+game. An obvious use is a scene for the main game. A best practice is having the
+game's UI in its own scene. Or a scene for a main menu.
+
+A scene includes the =init=, =preload=, =create=, and =update= functions for
+game logic and loading assets. Scene's also have a few settings associated with
+them. One which, named "active", determines if the scene is active.
+
+** The =scene= Field of a GameConfig object
+
+This field can be
+
+1. A Phaser.Scene object
+2. An array of Phaser.Scene objects
+3. A few other things which aren't immediately important.
+
+If multiple scenes are given, the first is started, and the remainder are started
+only if their "active" setting is true.
+
+The following config loads the =HelloWorldScene=, and the =UIScene= is run by the
+HelloWorldScene's =create= function.
+
+   1. index.js
+
+      #+begin_src javascript
+        import Phaser from 'phaser';
+
+        import HelloWorldScene from './scenes/hello-world-scene.js'
+        import UIScene from './scenes/ui-scene.js'
+
+        const config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 300 },
+                    debug: false
+                }
+            },
+            scene: [ HelloWorldScene,
+                     UIScene ]
+        };
+
+        export default new Phaser.Game(config);
+      #+end_src
+
+   2. scenes/hello-world-scene.js
+
+      #+begin_src javascript
+        import Phaser from 'phaser'
+
+        export default class HelloWorldScene extends Phaser.Scene
+        {
+            constructor()
+            {
+                super('hello-world')
+            }
+
+            preload()
+            {
+            }
+
+            create()
+            {
+                // run ui-scene parallel to this one
+                this.scene.run('ui-scene')
+            }
+
+            update()
+            {
+            }
+        }
+      #+end_src
+
+   3. scenes/ui-scene.js
+
+      #+begin_src javascript
+        import Phaser from 'phaser'
+
+        export default class UIScene extends Phaser.Scene
+        {
+            constructor()
+            {
+                super('ui-scene')
+            }
+
+            create()
+            {
+                this.label = this.add.text(10, 10, 'Count: 0', {
+                    fontSize: 32
+                })
+            }
+
+            updateCount(count)
+            {
+                this.label.text = `Some Text`
+            }
+        }
+      #+end_src

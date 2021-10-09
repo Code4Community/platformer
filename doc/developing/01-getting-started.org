@@ -1,0 +1,57 @@
+#+title: Getting Started with Developing this Project
+#+author: Tassos Manganaris
+
+* Development Tools
+
+This project uses =npm= and a few other programs as development tools. To
+get those tools, complete the following process:
+
+1. Install [[https://nodejs.org/en/][NodeJS]], which will also probably install =npm=.
+2. Clone [[https://github.com/Code4Community/platformer][this repository]] onto your computer.
+3. Navigate to this project in a terminal and run =npm install=, which will
+   install all the other programs.
+
+* Running the Project
+
+To see the current state of the project, run the following command while inside
+the project:
+
+: npm run start
+
+That will run the "start" script, which is shown below and in [[https://github.com/Code4Community/platformer/blob/master/package.json][the file linked here]].
+
+#+begin_src
+    "scripts": {
+	"build": "webpack --config webpack/prod.js ",
+	"start": "webpack-dev-server --config webpack/base.js --open"
+    }
+#+end_src
+
+This scripts rely on a program called =webpack=.
+
+* Basics of =npm=
+
+=npm= is a package manager for java script projects. One writes the package's
+information in a file named "package.json", and =npm= can use that information
+to build or distribute the package. The most important operations are
+
+1. Installing dependencies for a project.
+
+   : npm install
+
+2. Running script "xyz" for a project.
+
+   : npm run xyz
+
+* Basics of =webpack=
+
+=webpack= is a build system for web applications. It is configured with files
+under the "webpack" directory. It allows us to split code into modules and then
+combines the needed ones into a minimal file for distribution. Other assets,
+like images, can be included.
+
+It also provides a web server to use for development. When any of the source is
+changed, webpack quickly rebuilds the application and reloads the
+application. That is run with
+
+: npm run start
