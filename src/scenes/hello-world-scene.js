@@ -1,7 +1,11 @@
 import Phaser from 'phaser'
+import eventsCenter from '../events-center.js'
 
 export default class HelloWorldScene extends Phaser.Scene
 {
+    spacebar;
+    count;
+
     constructor()
     {
 	super('hello-world')
@@ -35,5 +39,26 @@ export default class HelloWorldScene extends Phaser.Scene
         logo.setCollideWorldBounds(true)
 
         emitter.startFollow(logo)
+
+        // input keys
+	this.cursors = this.input.keyboard.createCursorKeys();
+        this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        this.count = 0;
+
+        // run ui-scene parallel to this one
+        this.scene.run('ui-scene')
+    }
+
+    update()
+    {
+        if (Phaser.Input.Keyboard.JustDown(this.spacebar))
+        {
+            ++this.count;
+
+            eventsCenter.emit('update-count', this.count)
+        }
+
+
     }
 }
