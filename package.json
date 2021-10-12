@@ -35,11 +35,11 @@
         "webpack": "^4.41.2",
         "webpack-cli": "^3.3.10",
         "webpack-dev-server": "^3.9.0",
-        "webpack-merge": "^4.2.2"
+        "webpack-merge": "^4.2.2",
+        "css-loader": "^5.2.7",
+        "style-loader": "^2.0.0"
     },
     "dependencies": {
-        "css-loader": "^5.2.7",
-        "phaser": "^3.50.0",
-        "style-loader": "^2.0.0"
+        "phaser": "^3.50.0"
     }
 }
