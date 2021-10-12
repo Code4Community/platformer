@@ -4,6 +4,8 @@ import TutorialScene from './scenes/tutorial-scene.js'
 import HelloWorldScene from './scenes/hello-world-scene.js'
 import UIScene from './scenes/ui-scene.js'
 
+import style from './css/style.css'
+
 const config = {
     type: Phaser.AUTO,
     width: 800,
