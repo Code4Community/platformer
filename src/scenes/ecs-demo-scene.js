@@ -5,18 +5,27 @@ import {
     addComponent,
 } from 'bitecs'
 
-import eventsCenter from '../events-center.js'
 import Entity from '../entity.js'
 
-import Position from '../components/position.js'
+import {
+    Emitter,
+    Sprite,
+    Image
+} from '../components/phaser-components.js'
 
-import createPositionDebugSystem from '../systems/position-debug.js'
+import {
+    createImageSystem,
+    createEmitterSystem
+} from '../systems/phaser-systems.js'
 
 export default class ECSDemoScene extends Phaser.Scene
 {
+    globalEntityMap;
+
     constructor()
     {
 	super('ecs-demo')
+        this.globalEntityMap = new Map()
     }
 
     preload()
@@ -30,7 +39,11 @@ export default class ECSDemoScene extends Phaser.Scene
 
     create()
     {
+        // The world for all bitECS entities
+        this.world = createWorld()
+
         this.add.image(400, 300, 'sky')
+
 
         const particles = this.add.particles('red')
 
@@ -40,28 +53,24 @@ export default class ECSDemoScene extends Phaser.Scene
             blendMode: 'ADD'
         })
 
-        const logo = this.physics.add.image(400, 100, 'logo')
+        // The entity for a bouncing logo
+        const logo = new Entity(this.world, [Image, Emitter])
 
-        logo.setVelocity(100, 200)
-        logo.setBounce(1, 1)
-        logo.setCollideWorldBounds(true)
+        this.imageSystem = createImageSystem(this, ['logo']);
+        this.emitterSystem = createEmitterSystem(this, [emitter]);
 
-        emitter.startFollow(logo)
+        this.imageSystem(this.world)
+        this.emitterSystem(this.world)
 
-        // ECS Additions
-        this.world = createWorld()
+        // const logoObject = this.physics.add.image(400, 100, 'logo')
+        const logoObject = this.globalEntityMap.get(logo.id)
 
-        const entity = new Entity(this.world, [Position])
-
-        entity.set(Position, "x", 65)
-        entity.get(Position, "x")
-
-        // Systems
-        this.positionDebugSystem = createPositionDebugSystem()
+        logoObject.setVelocity(200, 100)
+        logoObject.setBounce(1, 1)
+        logoObject.setCollideWorldBounds(true)
     }
 
     update()
     {
-        this.positionDebugSystem(this.world)
     }
 }
