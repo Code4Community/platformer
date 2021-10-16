@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import ECSScene from './ecs-scene.js'
 import {
     createWorld,
     addEntity,
@@ -13,19 +14,13 @@ import {
     Image
 } from '../components/phaser-components.js'
 
-import {
-    createImageSystem,
-    createEmitterSystem
-} from '../systems/phaser-systems.js'
+import { ImageSystem, EmitterSystem } from '../systems/phaser-systems.js'
 
-export default class ECSDemoScene extends Phaser.Scene
+export default class ECSDemoScene extends ECSScene
 {
-    globalEntityMap;
-
     constructor()
     {
 	super('ecs-demo')
-        this.globalEntityMap = new Map()
     }
 
     preload()
@@ -39,11 +34,7 @@ export default class ECSDemoScene extends Phaser.Scene
 
     create()
     {
-        // The world for all bitECS entities
-        this.world = createWorld()
-
         this.add.image(400, 300, 'sky')
-
 
         const particles = this.add.particles('red')
 
@@ -56,11 +47,11 @@ export default class ECSDemoScene extends Phaser.Scene
         // The entity for a bouncing logo
         const logo = new Entity(this.world, [Image, Emitter])
 
-        this.imageSystem = createImageSystem(this, ['logo']);
-        this.emitterSystem = createEmitterSystem(this, [emitter]);
+        this.imageSystem = new ImageSystem(this);
+        this.emitterSystem = new EmitterSystem(this);
 
-        this.imageSystem(this.world)
-        this.emitterSystem(this.world)
+        this.imageSystem.create(['logo'])
+        this.emitterSystem.create([emitter])
 
         // const logoObject = this.physics.add.image(400, 100, 'logo')
         const logoObject = this.globalEntityMap.get(logo.id)

@@ -1,10 +1,5 @@
 import Phaser from 'phaser'
-import {
-    defineSystem,
-    defineQuery,
-    enterQuery,
-    exitQuery
-} from 'bitecs'
+import System from './system.js'
 
 import {
     Emitter,
@@ -12,105 +7,104 @@ import {
     Image
 } from '../components/phaser-components.js'
 
-function createSpriteSystem(scene, textures) {
-    // There are two things at play here: Phaser GameObjects and bitECS
-    // entities. The bitECS entities are just numbers. In order to have access
-    // to all the complex data available from the Phaser side, we need to
-    // associate those numbers (IDs) with Phaser Gameobjects. Then whenever this
-    // system needs to read an entities X position or something, it can just
-    // lookup the Phaser GameObject in this map and poke around.
+class SpriteSystem extends System {
+    constructor(scene)
+    {
+        super(scene, [Sprite])
 
-    // This can't be used to access an entity's corresponding gameobject outside
-    // of this system. To do that, we need another map local to the scene. When
-    // an entity enters, that map is also updated. This sort of makes the
-    // assumption that an entity is associated with only one game object, which
-    // I think is a safe assumption. Hopefully I'm not wrong about that.
-    const localEntityMap = new Map()
+        // There are two things at play here: Phaser GameObjects and bitECS
+        // entities. The bitECS entities are just numbers. In order to have access
+        // to all the complex data available from the Phaser side, we need to
+        // associate those numbers (IDs) with Phaser Gameobjects. Then whenever this
+        // system needs to read an entities X position or something, it can just
+        // lookup the Phaser GameObject in this map and poke around.
 
-    const getAll = defineQuery([Sprite])
-    const getEntered = enterQuery(getAll)
-    const getExited = exitQuery(getAll)
+        // This can't be used to access an entity's corresponding gameobject outside
+        // of this system. To do that, we need another map local to the scene. When
+        // an entity enters, that map is also updated. This sort of makes the
+        // assumption that an entity is associated with only one game object, which
+        // I think is a safe assumption. Hopefully I'm not wrong about that.
+        this.localSpriteMap = new Map();
+    }
 
-    return (world) => {
-        const all = getAll(world)
-        const entered = getEntered(world)
-        const exited = getExited(world)
+    create(textures)
+    {
+        const entered = this.getEntered(this.world)
 
         entered.forEach((entityID) => {
 	    const tid = Sprite.textureID[entityID]
 	    const textureName = textures[tid]
             const sprite = scene.physics.add.sprite(0, 0, textureName)
 
-	    localEntityMap.set(entityID, sprite)
-            scene.globalEntityMap.set(entityID, sprite)
+	    this.localSpriteMap.set(entityID, sprite)
+            this.scene.globalEntityMap.set(entityID, sprite)
         })
+    }
 
-        all.forEach((entityID) => {
-        })
+    update()
+    {
+    }
 
-        exited.forEach((entityID) => {
-        })
-
-	return world
+    exit()
+    {
     }
 }
 
-function createImageSystem(scene, textures) {
-    const localEntityMap = new Map()
+class ImageSystem extends System {
+    constructor(scene)
+    {
+        super(scene, [Image])
+        this.localImageMap = new Map();
+    }
 
-    const getAll = defineQuery([Image])
-    const getEntered = enterQuery(getAll)
-    const getExited = exitQuery(getAll)
-
-    return (world) => {
-        const all = getAll(world)
-        const entered = getEntered(world)
-        const exited = getExited(world)
+    create(textures)
+    {
+        const entered = this.getEntered(this.world)
 
         entered.forEach((entityID) => {
 	    const tid = Image.textureID[entityID]
 	    const textureName = textures[tid]
-            const image = scene.physics.add.image(0, 0, textureName)
+            const image = this.scene.physics.add.image(0, 0, textureName)
 
-	    localEntityMap.set(entityID, image)
-            scene.globalEntityMap.set(entityID, image)
+	    this.localImageMap.set(entityID, image)
+            this.scene.globalEntityMap.set(entityID, image)
         })
+    }
 
-        all.forEach((entityID) => {
-        })
+    update()
+    {
+    }
 
-        exited.forEach((entityID) => {
-        })
-
-	return world
+    exit()
+    {
     }
 }
 
-function createEmitterSystem(scene, emitters) {
-    const getAll = defineQuery([Emitter])
-    const getEntered = enterQuery(getAll)
-    const getExited = exitQuery(getAll)
+class EmitterSystem extends System {
+    constructor(scene)
+    {
+        super(scene, [Emitter])
+    }
 
-    return (world) => {
-        const all = getAll(world)
-        const entered = getEntered(world)
-        const exited = getExited(world)
+    create(emitters)
+    {
+        const entered = this.getEntered(this.world)
 
         entered.forEach((entityID) => {
 	    const eid = Emitter.emitterID[entityID]
 	    const emitter = emitters[eid]
-            const entityObject = scene.globalEntityMap.get(entityID)
+            const entityObject = this.scene.globalEntityMap.get(entityID)
             emitter.startFollow(entityObject)
         })
+    }
 
-        all.forEach((entityID) => {
-        })
+    update(world)
+    {
+    }
 
-        exited.forEach((entityID) => {
-        })
-
-	return world
+    exit(world)
+    {
     }
 }
 
-export { createSpriteSystem, createImageSystem, createEmitterSystem }
+export { SpriteSystem, ImageSystem, EmitterSystem }
