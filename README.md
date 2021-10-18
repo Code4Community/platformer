@@ -4,6 +4,7 @@
 
 1. Clone this repository onto your computer.
 
+
         git clone https://github.com/Code4Community/platformer.git
 
 2. Install [npm](https://www.npmjs.com/package/npm "npm")
