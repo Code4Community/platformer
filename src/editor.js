@@ -1,10 +1,11 @@
-import CodeMirror from 'codemirror'
+// The below two lines are magical imports.  There appears to be a small bug in CodeMirror requiring it to be imported this way when using webpack.
+// DO NOT TOUCH PLEASE :-)
+import CodeMirror from 'codemirror/lib/codemirror.js';
+import 'codemirror/addon/mode/simple.js';
+
 
 // Constants
 var EDITOR_ID = "editor"
-
-var editor;
-var indent = 0;
 
 // DOM Elements
 var textArea = document.getElementById(EDITOR_ID);
@@ -24,15 +25,7 @@ CodeMirror.defineSimpleMode("mode", {
     }
 });
 
-editor = CodeMirror.fromTextArea(textArea, {
+CodeMirror.fromTextArea(textArea, {
     lineNumbers: true,
     mode: "mode"
 });
-
-
-// Page Setup
-windowWidth = window.innerWidth;
-windowHeight = window.innerHeight;
-
-// Set CodeMirror size
-editor.setSize(Math.floor(windowWidth - canvas.width), canvas.height);
