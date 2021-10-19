@@ -2,7 +2,7 @@
 // DO NOT TOUCH PLEASE :-)
 import CodeMirror from 'codemirror/lib/codemirror.js';
 import 'codemirror/addon/mode/simple.js';
-
+import 'codemirror/lib/codemirror.css';
 
 // Constants
 var EDITOR_ID = "editor"
@@ -30,4 +30,5 @@ var editor = CodeMirror.fromTextArea(textArea, {
     value: "function myScript(){return 100;}\n",
     mode: "mode"
 });
+
 editor.setSize("100%", "100%");
