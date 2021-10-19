@@ -6,6 +6,7 @@ import HelloWorldScene from './scenes/hello-world-scene.js'
 import UIScene from './scenes/ui-scene.js'
 
 import style from './css/style.css'
+import codemirror from './codemirror.js'
 
 const config = {
     type: Phaser.AUTO,

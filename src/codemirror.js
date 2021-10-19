@@ -1,3 +1,5 @@
+import CodeMirror from 'codemirror'
+
 // Constants
 var EDITOR_ID = "editor"
 
