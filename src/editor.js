@@ -25,7 +25,9 @@ CodeMirror.defineSimpleMode("mode", {
     }
 });
 
-CodeMirror.fromTextArea(textArea, {
+var editor = CodeMirror.fromTextArea(textArea, {
     lineNumbers: true,
+    value: "function myScript(){return 100;}\n",
     mode: "mode"
 });
+editor.setSize("100%", "100%");
