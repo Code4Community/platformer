@@ -1,9 +1,12 @@
 import Phaser from 'phaser';
 
 import ECSDemoScene from './scenes/ecs-demo-scene.js'
-import TutorialECSScene from './scenes/tutorial-ecs-scene.js'
+import HelloWorldScene from './scenes/hello-world-scene.js'
+import HackingScene from './scenes/hacking-scene.js'
+import UIScene from './scenes/ui-scene.js'
 
 import style from './css/style.css'
+import './editor.js'
 
 const config = {
     type: Phaser.AUTO,
@@ -16,7 +19,8 @@ const config = {
 	    debug: false
 	}
     },
-    scene: [ TutorialECSScene ]
+    scene: [ HackingScene,
+             UIScene ]
 };
 
 export default new Phaser.Game(config);
