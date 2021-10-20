@@ -1,4 +1,4 @@
-// The below two lines are magical imports.  There appears to be a small bug in CodeMirror requiring it to be imported this way when using webpack.
+// The below lines are magical imports.
 // DO NOT TOUCH PLEASE :-)
 import CodeMirror from 'codemirror/lib/codemirror.js';
 import 'codemirror/addon/mode/simple.js';
@@ -27,8 +27,21 @@ CodeMirror.defineSimpleMode("mode", {
 
 var editor = CodeMirror.fromTextArea(textArea, {
     lineNumbers: true,
-    value: "function myScript(){return 100;}\n",
-    mode: "mode"
+    mode: "javascript"
 });
 
 editor.setSize("100%", "100%");
+
+function clearEditor() {
+    editor.setValue("");
+}
+
+function setEditorText(text) {
+    editor.setValue(text);
+}
+
+function getEditorText() {
+    return editor.getValue();
+}
+
+export { setEditorText, getEditorText, clearEditor }

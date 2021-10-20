@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import TutorialScene from './scenes/tutorial-scene.js'
 import ECSDemoScene from './scenes/ecs-demo-scene.js'
 import HelloWorldScene from './scenes/hello-world-scene.js'
+import HackingScene from './scenes/hacking-scene.js'
 import UIScene from './scenes/ui-scene.js'
 
 import style from './css/style.css'
@@ -19,7 +20,7 @@ const config = {
 	    debug: false
 	}
     },
-    scene: [ ECSDemoScene,
+    scene: [ HackingScene,
              UIScene ]
 };
 
