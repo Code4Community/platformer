@@ -1,9 +1,9 @@
 import { defineComponent, Types } from 'bitecs'
 
-const Vector2 = defineComponent({
+const Vector2 = {
     x: Types.f32,
     y: Types.f32
-})
+}
 
 const Position = defineComponent(Vector2)
 const Velocity = defineComponent(Vector2)
@@ -16,7 +16,7 @@ const Emitter = defineComponent({
 })
 
 const Sprite = defineComponent({
-    textureID: Types.ui8
+    sheetID: Types.ui8
 })
 
 const Image = defineComponent({
