@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
+import ECSScene from './ecs-scene.js'
 import eventsCenter from '../events-center.js'
-
-import { setEditorText, getEditorText, clearEditor } from '../editor.js'
+import Entity from '../entity.js'
 
 import skyImage from '../assets/sky.png';
 import groundImage from '../assets/platform.png';
@@ -9,43 +9,23 @@ import starImage from '../assets/star.png';
 import bombImage from '../assets/bomb.png';
 import dudeSpriteSheet from '../assets/dude.png';
 
-function toggleHacking() {
-    let entity = this;
-    let entityData = entity.data.values;
-    let mutableData = entityData.mutableData;
+import {
+    Sprite
+} from '../components/phaser-components.js'
 
-    if (entityData.hacked) {
-        stopHacking(mutableData);
-        entityData.hacked = false;
-    } else {
-        startHacking(mutableData);
-        entityData.hacked = true;
-    }
-}
+import {
+    Enemy
+} from '../components/enemy-components.js'
 
-function startHacking(mutableData) {
-    if ("ai" in mutableData) {
-        const ai = mutableData.ai;
-        setEditorText(ai);
-    }
+import {
+    Hackable
+} from '../components/hackable-components.js'
 
-    eventsCenter.emit('start-hacking')
+import { SpriteSystem } from '../systems/phaser-systems.js'
+import { EnemySystem } from '../systems/enemy-systems.js'
+import { HackableSystem } from '../systems/hackable-systems.js'
 
-    // Pause the game
-}
-
-function stopHacking(mutableData) {
-    const ai = getEditorText();
-    clearEditor();
-
-    mutableData.ai = ai;
-
-    eventsCenter.emit('stop-hacking')
-
-    // Un-pause the game
-}
-
-export default class HackingScene extends Phaser.Scene
+export default class HackingScene extends ECSScene
 {
     player;
     platforms;
@@ -107,30 +87,18 @@ export default class HackingScene extends Phaser.Scene
 	// platform collisions
 	this.physics.add.collider(this.player, this.platforms);
 
+        this.hackableEntity = new Entity(this.world, [Sprite, Enemy, Hackable]);
+
+        this.spriteSystem = new SpriteSystem(this);
+        this.enemySystem = new EnemySystem(this);
+        this.hackableSystem = new HackableSystem(this);
+
+        this.spriteSystem.create(['dude'])
+        this.enemySystem.create()
+        this.hackableSystem.create()
+
 	// hackable guy
-	this.hackableGuy = this.physics.add.sprite(400, 450, 'dude');
-	this.hackableGuy.setBounce(0.2);
-	this.hackableGuy.setCollideWorldBounds(true);
-	this.hackableGuy.body.setGravityY(300);
-
-        // Make interactive
-        this.hackableGuy.setInteractive();
-        this.hackableGuy.on('pointerdown', toggleHacking);
-
-        // Add data
-        this.hackableGuy.setDataEnabled();
-        this.hackableGuy.data.set('hacked', false);
-        this.hackableGuy.data.set('mutableData', { ai: `
-this.hackableGuy.setVelocityX(-160);
-if (this.hackableGuy.body.touching.down) {
-    this.hackableGuy.setVelocityY(-400);
-}
-` });
-
-        console.log(this.hackableGuy.data.values.mutableData.ai);
-
-	// platform collisions
-	this.physics.add.collider(this.hackableGuy, this.platforms);
+	this.hackableGuy = this.globalEntityMap.get(this.hackableEntity.id);
 
 	// input keys
 	this.cursors = this.input.keyboard.createCursorKeys();

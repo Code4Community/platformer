@@ -5,8 +5,7 @@ import HelloWorldScene from './scenes/hello-world-scene.js'
 import HackingScene from './scenes/hacking-scene.js'
 import UIScene from './scenes/ui-scene.js'
 
-import style from './css/style.css'
-import './editor.js'
+import './css/style.css'
 
 const config = {
     type: Phaser.AUTO,
