@@ -60,9 +60,9 @@ class HackableSystem extends System {
             hackableObject.setDataEnabled();
             hackableObject.data.set('hacked', false);
             hackableObject.data.set('mutableData', { ai: `
-this.hackableGuy.setVelocityX(-160);
-if (this.hackableGuy.body.touching.down) {
-    this.hackableGuy.setVelocityY(-400);
+hackableObject.setVelocityX(-160);
+if (hackableObject.body.touching.down) {
+    hackableObject.setVelocityY(-400);
 }
 ` });
         })
@@ -70,6 +70,19 @@ if (this.hackableGuy.body.touching.down) {
 
     update()
     {
+        const all = this.getAll(this.world)
+
+        all.forEach((entityID) => {
+            const hackableObject = this.scene.globalEntityMap.get(entityID);
+
+            if ("ai" in hackableObject.data.values.mutableData) {
+                const ai = hackableObject.data.values.mutableData.ai;
+                // This is just evaluating raw javascript for testing.  The
+                // javascript is evaluated inside the environment at this
+                // point. Its just like having the code written here.
+                eval(ai);
+            }
+        })
     }
 
     exit()
