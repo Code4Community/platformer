@@ -18,43 +18,39 @@ export default class TileDemoScene extends Phaser.Scene
 
     create()
     {
-        // Not sure how best to do this...
-        this.physics.world.setBounds(0, 0, 3392, 240);
-
         var map = this.make.tilemap({ key: 'map' });
         // The following two strings are keys inside the json.
         var tileset = map.addTilesetImage('SuperMarioBros-World1-1', 'mario-tiles');
         var layer = map.createLayer('World1', tileset, 0, 0);
 
-        this.cursors = this.input.keyboard.createCursorKeys();
+        const camera = this.cameras.main;
+        // Set up the arrows to control the camera
+        const cursors = this.input.keyboard.createCursorKeys();
 
-        this.ship = this.physics.add.image(400, 100, 'ship').setAngle(90).setCollideWorldBounds(true);
+        this.controls = new Phaser.Cameras.Controls.FixedKeyControl({
+            camera: camera,
+            left: cursors.left,
+            right: cursors.right,
+            up: cursors.up,
+            down: cursors.down,
+            speed: 0.5
+        });
 
-        this.cameras.main.startFollow(this.ship, true, 0.08, 0.08);
+        // Constrain the camera so that it isn't allowed to move outside the width/height of tilemap
+        camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        camera.setZoom(4);
 
-        this.cameras.main.setZoom(4);
+        // Help text that has a "fixed" position on the screen
+        this.add.text(16, 16, "Arrow keys to scroll", {
+            font: "18px monospace",
+            fill: "#ffffff",
+            padding: { x: 20, y: 10 },
+            backgroundColor: "#000000"
+        }).setScrollFactor(0);
     }
 
-    update()
+    update(time, delta)
     {
-        this.ship.setVelocity(0);
-
-        if (this.cursors.left.isDown)
-        {
-            this.ship.setAngle(-90).setVelocityX(-200);
-        }
-        else if (this.cursors.right.isDown)
-        {
-            this.ship.setAngle(90).setVelocityX(200);
-        }
-
-        if (this.cursors.up.isDown)
-        {
-            this.ship.setVelocityY(-200);
-        }
-        else if (this.cursors.down.isDown)
-        {
-            this.ship.setVelocityY(200);
-        }
+        this.controls.update(delta);
     }
 }
