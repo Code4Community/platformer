@@ -58,8 +58,8 @@ export default class TutorialECSScene extends ECSScene
 	this.platforms.create(750, 220, 'ground');
 
 	// player
-        const player = new Entity(this.world, [Sprite,
-                                               Player]);
+        const player = new Entity(this, [Sprite,
+                                         Player]);
 
         this.spriteSystem.create(['dude']);
         this.playerSystem.create('dude');

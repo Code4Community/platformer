@@ -16,11 +16,12 @@ const Emitter = defineComponent({
 })
 
 const Sprite = defineComponent({
-    sheetID: Types.ui8
+    // A 16 character string.
+    sheetKey: [ Types.ui8, 16 ]
 })
 
 const Image = defineComponent({
-    textureID: Types.ui8
+    imageKey: [ Types.ui8, 16 ]
 })
 
 export {

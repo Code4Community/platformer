@@ -45,17 +45,16 @@ export default class ECSDemoScene extends ECSScene
         })
 
         // The entity for a bouncing logo
-        const logo = new Entity(this.world, [Image, Emitter])
+        const logo = new Entity(this, [Image, Emitter])
+        logo.set(Image, "imageKey", "logo");
 
         this.imageSystem = new ImageSystem(this);
         this.emitterSystem = new EmitterSystem(this);
 
-        this.imageSystem.create(['logo'])
+        this.imageSystem.create()
         this.emitterSystem.create([emitter])
 
-        // const logoObject = this.physics.add.image(400, 100, 'logo')
-        const logoObject = this.globalEntityMap.get(logo.id)
-
+        const logoObject = logo.getObject();
         logoObject.setVelocity(200, 100)
         logoObject.setBounce(1, 1)
         logoObject.setCollideWorldBounds(true)

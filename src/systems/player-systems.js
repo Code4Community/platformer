@@ -1,9 +1,7 @@
 import Phaser from 'phaser'
 import System from './system.js'
 
-import {
-    Player
-} from '../components/player-components.js'
+import { Player } from '../components/player-components.js'
 
 class PlayerSystem extends System {
     constructor(scene)

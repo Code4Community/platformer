@@ -21,14 +21,14 @@ class SpriteSystem extends System {
         // global entity map and poke around.
     }
 
-    create(textures)
+    create()
     {
         const entered = this.getEntered(this.world)
 
         entered.forEach((entityID) => {
-	    const tid = Sprite.sheetID[entityID]
-	    const textureName = textures[tid]
-            const sprite = this.scene.physics.add.sprite(0, 0, textureName)
+	    const textureByteString = Sprite.sheetKey[entityID];
+	    const textureKey = String.fromCharCode(...textureByteString);
+            const sprite = this.scene.physics.add.sprite(0, 0, textureKey)
 
             this.scene.globalEntityMap.set(entityID, sprite)
         })
@@ -49,14 +49,14 @@ class ImageSystem extends System {
         super(scene, [Image])
     }
 
-    create(textures)
+    create()
     {
         const entered = this.getEntered(this.world)
 
         entered.forEach((entityID) => {
-	    const tid = Image.textureID[entityID]
-	    const textureName = textures[tid]
-            const image = this.scene.physics.add.image(0, 0, textureName)
+	    const imageByteString = Image.imageKey[entityID];
+	    const imageKey = String.fromCharCode(...imageByteString);
+            const image = this.scene.physics.add.image(0, 0, imageKey)
 
             this.scene.globalEntityMap.set(entityID, image)
         })

@@ -52,8 +52,11 @@ export default class HackingScene extends ECSScene
 	this.platforms.create(750, 220, 'ground');
 
 	// entities
-        const player = new Entity(this.world, [Sprite, Player]);
-        const hackableEntity = new Entity(this.world, [Sprite, Enemy, Hackable]);
+        const player = new Entity(this, [Sprite, Player]);
+        const hackableEntity = new Entity(this, [Sprite, Enemy, Hackable]);
+
+        player.set(Sprite, "sheetKey", "dude");
+        hackableEntity.set(Sprite, "sheetKey", "dude");
 
         // systems
         this.enemySystem = new EnemySystem(this);
@@ -61,15 +64,16 @@ export default class HackingScene extends ECSScene
         this.spriteSystem = new SpriteSystem(this);
         this.hackableSystem = new HackableSystem(this);
 
-        this.spriteSystem.create(['dude'])
+        this.spriteSystem.create();
         this.playerSystem.create('dude')
         this.enemySystem.create()
         this.hackableSystem.create()
 
-	// hackable guy
-	this.hackableGuy = this.globalEntityMap.get(hackableEntity.id);
-	this.cursors = this.input.keyboard.createCursorKeys();
+        this.cursors = this.input.keyboard.createCursorKeys();
         this.scene.run('ui-scene')
+
+        hackableEntity.getObject().x = 650;
+        hackableEntity.getObject().y = 460;
     }
 
     update()
