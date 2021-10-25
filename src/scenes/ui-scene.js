@@ -5,27 +5,32 @@ export default class UIScene extends Phaser.Scene
 {
     constructor()
     {
-	super('ui-scene')
+	super('ui')
     }
 
     create()
     {
-	this.label = this.add.text(10, 10, 'Count: 0', {
+	const pauseLabel = this.add.text(700, 100, 'Pause', {
 	    fontSize: 32
 	})
 
-        // listen to 'update-count' event and call `updateCount()`
-	// when it fires
-	eventsCenter.on('update-count', this.updateCount, this)
-
-	// clean up when Scene is shutdown
-	this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
-	    eventsCenter.off('update-count', this.updateCount, this)
-	})
+        pauseLabel.setInteractive();
+        pauseLabel.on('pointerdown', () => {
+            if (this.scene.isPaused('tutorial')) {
+                this.scene.resume('tutorial');
+            } else {
+                this.scene.pause('tutorial');
+            }
+        });
     }
 
-    updateCount(count)
+    pauseGame()
     {
-	this.label.text = `Count: ${count}`
+        this.scene.pause();
+    }
+
+    showPauseMenu()
+    {
+        this.unPauseLabel.setVisible(true);
     }
 }

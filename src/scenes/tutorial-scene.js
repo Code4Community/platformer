@@ -98,6 +98,9 @@ export default class TutorialScene extends Phaser.Scene
 	this.bombs = this.physics.add.group();
 	this.physics.add.collider(this.bombs, this.platforms);
 	this.physics.add.collider(this.player, this.bombs, this.hitBomb, null, this);
+
+        // ui
+        this.scene.launch('ui');
     }
 
     update()
