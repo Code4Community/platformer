@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
+import ECSScene from './ecs-scene.js'
 import eventsCenter from '../events-center.js'
-
-import { setEditorText, getEditorText, clearEditor } from '../editor.js'
+import Entity from '../entity.js'
 
 import skyImage from '../assets/sky.png';
 import groundImage from '../assets/platform.png';
@@ -9,43 +9,16 @@ import starImage from '../assets/star.png';
 import bombImage from '../assets/bomb.png';
 import dudeSpriteSheet from '../assets/dude.png';
 
-function toggleHacking() {
-    let entity = this;
-    let entityData = entity.data.values;
-    let mutableData = entityData.mutableData;
+import { Enemy } from '../components/enemy-components.js'
+import { Player } from '../components/player-components.js'
+import { Sprite } from '../components/phaser-components.js'
+import { Hackable } from '../components/hackable-components.js'
+import { EnemySystem } from '../systems/enemy-systems.js'
+import { PlayerSystem } from '../systems/player-systems.js'
+import { SpriteSystem } from '../systems/phaser-systems.js'
+import { HackableSystem } from '../systems/hackable-systems.js'
 
-    if (entityData.hacked) {
-        stopHacking(mutableData);
-        entityData.hacked = false;
-    } else {
-        startHacking(mutableData);
-        entityData.hacked = true;
-    }
-}
-
-function startHacking(mutableData) {
-    if ("ai" in mutableData) {
-        const ai = mutableData.ai;
-        setEditorText(ai);
-    }
-
-    eventsCenter.emit('start-hacking')
-
-    // Pause the game
-}
-
-function stopHacking(mutableData) {
-    const ai = getEditorText();
-    clearEditor();
-
-    mutableData.ai = ai;
-
-    eventsCenter.emit('stop-hacking')
-
-    // Un-pause the game
-}
-
-export default class HackingScene extends Phaser.Scene
+export default class HackingScene extends ECSScene
 {
     player;
     platforms;
@@ -78,94 +51,34 @@ export default class HackingScene extends Phaser.Scene
 	this.platforms.create(50, 250, 'ground');
 	this.platforms.create(750, 220, 'ground');
 
-	// player
-	this.player = this.physics.add.sprite(100, 450, 'dude');
-	this.player.setBounce(0.2);
-	this.player.setCollideWorldBounds(true);
-	this.player.body.setGravityY(300);
+	// entities
+        const player = new Entity(this, [Sprite, Player]);
+        const hackableEntity = new Entity(this, [Sprite, Enemy, Hackable]);
 
-	this.anims.create({
-	    key: 'left',
-	    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-	    frameRate: 10,
-	    repeat: 1
-	});
+        player.set(Sprite, "sheetKey", "dude");
+        hackableEntity.set(Sprite, "sheetKey", "dude");
 
-	this.anims.create({
-	    key: 'turn',
-	    frames: [ { key: 'dude', frame: 4 } ],
-	    frameRate: 20
-	});
+        // systems
+        this.enemySystem = new EnemySystem(this);
+        this.playerSystem = new PlayerSystem(this);
+        this.spriteSystem = new SpriteSystem(this);
+        this.hackableSystem = new HackableSystem(this);
 
-	this.anims.create({
-	    key: 'right',
-	    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-	    frameRate: 10,
-	    repeat: 1
-	});
+        this.spriteSystem.create();
+        this.playerSystem.create('dude')
+        this.enemySystem.create()
+        this.hackableSystem.create()
 
-	// platform collisions
-	this.physics.add.collider(this.player, this.platforms);
-
-	// hackable guy
-	this.hackableGuy = this.physics.add.sprite(400, 450, 'dude');
-	this.hackableGuy.setBounce(0.2);
-	this.hackableGuy.setCollideWorldBounds(true);
-	this.hackableGuy.body.setGravityY(300);
-
-        // Make interactive
-        this.hackableGuy.setInteractive();
-        this.hackableGuy.on('pointerdown', toggleHacking);
-
-        // Add data
-        this.hackableGuy.setDataEnabled();
-        this.hackableGuy.data.set('hacked', false);
-        this.hackableGuy.data.set('mutableData', { ai: `
-this.hackableGuy.setVelocityX(-160);
-if (this.hackableGuy.body.touching.down) {
-    this.hackableGuy.setVelocityY(-400);
-}
-` });
-
-        console.log(this.hackableGuy.data.values.mutableData.ai);
-
-	// platform collisions
-	this.physics.add.collider(this.hackableGuy, this.platforms);
-
-	// input keys
-	this.cursors = this.input.keyboard.createCursorKeys();
-
-        // run ui-scene parallel to this one
+        this.cursors = this.input.keyboard.createCursorKeys();
         this.scene.run('ui-scene')
+
+        hackableEntity.getObject().x = 650;
+        hackableEntity.getObject().y = 460;
     }
 
     update()
     {
-	if (this.cursors.left.isDown) {
-	    this.player.setVelocityX(-160);
-	    this.player.anims.play('left', true);
-	} else if (this.cursors.right.isDown) {
-	    this.player.setVelocityX(160);
-	    this.player.anims.play('right', true);
-	} else {
-	    this.player.setVelocityX(0);
-	    this.player.anims.play('turn');
-	}
-
-	if (this.cursors.up.isDown && this.player.body.touching.down) {
-	    this.player.setVelocityY(-600);
-	}
-
-        // if the guy's ai says "run"
-        // run to the left
-
-        // Language.eval
-        if ("ai" in this.hackableGuy.data.values.mutableData) {
-            const ai = this.hackableGuy.data.values.mutableData.ai;
-            // This is just evaluating raw javascript for testing.  The
-            // javascript is evaluated inside the environment at this
-            // point. Its just like having the code written here.
-            eval(ai);
-        }
+        this.playerSystem.update(this.cursors);
+        this.hackableSystem.update();
     }
 }

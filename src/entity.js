@@ -4,20 +4,24 @@ import {
 } from 'bitecs'
 
 export default class Entity {
+    world;
+    scene;
     id;
 
-    constructor(world, components)
+    constructor(scene, components)
     {
-        this.id = addEntity(world)
+        this.scene = scene;
+        this.world = scene.world;
+        this.id = addEntity(this.world)
 
         components.forEach((c) => {
-            addComponent(world, c, this.id)
+            addComponent(this.world, c, this.id)
         })
     }
 
-    getID()
+    getObject()
     {
-        return this.id
+        return this.scene.globalEntityMap.get(this.id);
     }
 
     get(component, key)
@@ -27,7 +31,13 @@ export default class Entity {
 
     set(component, key, value)
     {
-        component[key][this.eid] = value
+        const length = component[key][this.id].length;
+
+        if (typeof value == 'string') {
+            value = Uint8Array.from(value, (x) => x.charCodeAt(0))
+        }
+
+        component[key][this.id] = value
         return value
     }
 }
