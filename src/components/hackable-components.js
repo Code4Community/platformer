@@ -1,5 +1,5 @@
-import { defineComponent, Types } from 'bitecs'
+import { defineComponent, Types } from "bitecs";
 
-const Hackable = defineComponent()
+const Hackable = defineComponent();
 
-export { Hackable }
+export { Hackable };

@@ -1,7 +1,3 @@
 class Interperter {
-    constructor() {
-
-    }
-
-    
+  constructor() {}
 }

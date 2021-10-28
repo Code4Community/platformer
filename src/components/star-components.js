@@ -1,5 +1,5 @@
-import { defineComponent, Types } from 'bitecs'
+import { defineComponent, Types } from "bitecs";
 
-const Star = defineComponent()
+const Star = defineComponent();
 
-export { Star }
+export { Star };

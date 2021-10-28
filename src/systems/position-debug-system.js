@@ -1,18 +1,17 @@
-import {
-    defineSystem,
-    defineQuery,
-} from 'bitecs'
+import { defineSystem, defineQuery } from "bitecs";
 
-import Position from '../components/position.js'
+import Position from "../components/position.js";
 
 export default function createPositionDebugSystem() {
-    const positionQuery = defineQuery([Position])
+  const positionQuery = defineQuery([Position]);
 
-    return (world) => {
-	const entities = positionQuery(world)
+  return (world) => {
+    const entities = positionQuery(world);
 
-	console.log("Number of Entities with the Position Component: " + entities.length)
+    console.log(
+      "Number of Entities with the Position Component: " + entities.length
+    );
 
-	return world
-    }
+    return world;
+  };
 }
