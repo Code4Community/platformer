@@ -20,16 +20,10 @@ const config = {
     default: "arcade",
     arcade: {
       gravity: { y: 300 },
-      debug: false,
+      debug: true,
     },
   },
-  scene: [
-    MainMenuScene,
-    LevelSelectScene,
-    TutorialScene,
-    TileDemoScene,
-    UIScene,
-  ],
+  scene: [LevelSelectScene, HackingScene, TileDemoScene, UIScene],
 };
 
 export default new Phaser.Game(config);

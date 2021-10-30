@@ -20,7 +20,7 @@ export default class LevelSelectScene extends Phaser.Scene {
     });
     this.levelOneText.setInteractive();
     this.levelOneText.on("pointerdown", () => {
-      this.scene.start("tutorial");
+      this.scene.start("hacking");
     });
 
     this.levelTwoText = this.add.text(300, 200, "level two", {

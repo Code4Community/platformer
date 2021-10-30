@@ -45,7 +45,7 @@ class PlayerSystem extends System {
       player.setCollideWorldBounds(true);
       player.body.setGravityY(300);
 
-      this.scene.physics.add.collider(player, this.scene.platforms);
+      this.scene.physics.add.collider(player, this.scene.layer);
     });
   }
 
@@ -66,8 +66,8 @@ class PlayerSystem extends System {
         player.anims.play("turn");
       }
 
-      if (cursors.up.isDown && player.body.touching.down) {
-        player.setVelocityY(-600);
+      if (cursors.up.isDown && player.body.blocked.down) {
+        player.setVelocityY(-350);
       }
     });
   }

@@ -18,7 +18,7 @@ class EnemySystem extends System {
       enemy.setCollideWorldBounds(true);
       enemy.body.setGravityY(300);
 
-      this.scene.physics.add.collider(enemy, this.scene.platforms);
+      this.scene.physics.add.collider(enemy, this.scene.layer);
     });
   }
 

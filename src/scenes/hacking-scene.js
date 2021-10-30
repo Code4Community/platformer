@@ -8,6 +8,8 @@ import groundImage from "../assets/platform.png";
 import starImage from "../assets/star.png";
 import bombImage from "../assets/bomb.png";
 import dudeSpriteSheet from "../assets/dude.png";
+import marioTiles from "../assets/mario-tiles.png";
+import superMarioMap from "../assets/super-mario-map.json";
 
 import { Enemy } from "../components/enemy-components.js";
 import { Player } from "../components/player-components.js";
@@ -20,9 +22,9 @@ import { HackableSystem } from "../systems/hackable-systems.js";
 
 export default class HackingScene extends ECSScene {
   player;
-  platforms;
   cursors;
   hackableGuy;
+  layer;
 
   constructor() {
     super("hacking");
@@ -37,16 +39,30 @@ export default class HackingScene extends ECSScene {
       frameWidth: 32,
       frameHeight: 48,
     });
+
+    this.load.image("mario-tiles", marioTiles);
+    this.load.tilemapTiledJSON("map", superMarioMap);
   }
 
   create() {
-    this.add.image(400, 300, "sky");
+    // The following two strings are keys inside the json.
+    var map = this.make.tilemap({ key: "map" });
+    var tileset = map.addTilesetImage("SuperMarioBros-World1-1", "mario-tiles");
+    this.layer = map.createLayer("World1", tileset, 0, 0);
+    this.layer.setCollisionByProperty({ collides: true });
 
-    this.platforms = this.physics.add.staticGroup();
-    this.platforms.create(400, 568, "ground").setScale(2).refreshBody();
-    this.platforms.create(600, 400, "ground");
-    this.platforms.create(50, 250, "ground");
-    this.platforms.create(750, 220, "ground");
+    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+    const debugGraphics = this.add.graphics().setAlpha(0.75);
+    this.layer.renderDebug(debugGraphics, {
+      tileColor: null, // Color of non-colliding tiles
+      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+      faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+    });
+
+    const camera = this.cameras.main;
+    camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    camera.setZoom(2.5);
 
     // entities
     const player = new Entity(this, [Sprite, Player]);
@@ -69,8 +85,10 @@ export default class HackingScene extends ECSScene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.scene.run("ui-scene");
 
-    hackableEntity.getObject().x = 650;
-    hackableEntity.getObject().y = 460;
+    hackableEntity.getObject().x = 0;
+    hackableEntity.getObject().y = 0;
+
+    camera.startFollow(player.getObject());
   }
 
   update() {
