@@ -59,7 +59,7 @@ class HackableSystem extends System {
       hackableObject.data.set("hacked", false);
       hackableObject.data.set("mutableData", {
         ai: `
-hackableObject.setVelocityX(160);
+hackableObject.setVelocityX(-160);
 if (hackableObject.body.blocked.down) {
     hackableObject.setVelocityY(-350);
 }

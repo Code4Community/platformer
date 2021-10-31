@@ -8,6 +8,9 @@ import groundImage from "../assets/platform.png";
 import starImage from "../assets/star.png";
 import bombImage from "../assets/bomb.png";
 import dudeSpriteSheet from "../assets/dude.png";
+import doorSpriteSheet from "../assets/door.png";
+import buttonSpriteSheet from "../assets/button.png";
+
 import marioTiles from "../assets/mario-tiles.png";
 import superMarioMap from "../assets/super-mario-map.json";
 
@@ -15,6 +18,7 @@ import { Enemy } from "../components/enemy-components.js";
 import { Player } from "../components/player-components.js";
 import { Sprite } from "../components/phaser-components.js";
 import { Hackable } from "../components/hackable-components.js";
+import { Door, Button } from "../components/interactable-components.js";
 import { EnemySystem } from "../systems/enemy-systems.js";
 import { PlayerSystem } from "../systems/player-systems.js";
 import { SpriteSystem } from "../systems/phaser-systems.js";
@@ -25,6 +29,8 @@ export default class HackingScene extends ECSScene {
   cursors;
   hackableGuy;
   layer;
+  door;
+  playerDoorCollider;
 
   constructor() {
     super("hacking");
@@ -38,6 +44,16 @@ export default class HackingScene extends ECSScene {
     this.load.spritesheet("dude", dudeSpriteSheet, {
       frameWidth: 32,
       frameHeight: 48,
+    });
+
+    this.load.spritesheet("door", doorSpriteSheet, {
+      frameWidth: 16,
+      frameHeight: 48,
+    });
+
+    this.load.spritesheet("button", buttonSpriteSheet, {
+      frameWidth: 32,
+      frameHeight: 16,
     });
 
     this.load.image("mario-tiles", marioTiles);
@@ -77,6 +93,7 @@ export default class HackingScene extends ECSScene {
     this.spriteSystem = new SpriteSystem(this);
     this.hackableSystem = new HackableSystem(this);
 
+    // Create Everything
     this.spriteSystem.create();
     this.playerSystem.create("dude");
     this.enemySystem.create();
@@ -85,13 +102,122 @@ export default class HackingScene extends ECSScene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.scene.run("ui-scene");
 
-    hackableEntity.getObject().x = 0;
-    hackableEntity.getObject().y = 0;
+    player.getObject().x = 20;
+    player.getObject().y = 150;
 
     camera.startFollow(player.getObject());
+
+    // getting the tiled objects
+    var objectLayer = map.getObjectLayer("Interactables");
+    var objects = objectLayer.objects;
+
+    var doors = objects.filter((object) => {
+      return object.type == "door";
+    });
+
+    this.doorObjects = doors.map((d) => {
+      var sprite = new Phaser.GameObjects.Sprite(this);
+      sprite.setName(d.name);
+      sprite.setPosition(d.x, d.y);
+      sprite.setTexture("door", null);
+      sprite.displayWidth = d.width;
+      sprite.displayHeight = d.height;
+
+      //  Origin is (0, 1) in Tiled, so find the offset that matches the Sprites origin.
+      //  Do not offset objects with zero dimensions (e.g. points).
+      var offset = {
+        x: sprite.originX * d.width,
+        y: (sprite.originY - 1) * d.height,
+      };
+
+      sprite.x += offset.x;
+      sprite.y += offset.y;
+
+      sprite.setDataEnabled();
+      sprite.data.set("doorID", d.id);
+
+      this.add.existing(sprite);
+      this.physics.add.existing(sprite, true);
+      this.playerDoorCollider = this.physics.add.collider(
+        player.getObject(),
+        sprite
+      );
+
+      return sprite;
+    });
+
+    // buttons
+    var buttons = objects.filter((object) => {
+      return object.type == "button";
+    });
+
+    var aButton;
+
+    var buttonObjects = buttons.map((b) => {
+      var sprite = new Phaser.GameObjects.Sprite(this);
+      sprite.setName(b.name);
+      sprite.setPosition(b.x, b.y);
+      sprite.setTexture("button", null);
+      sprite.displayWidth = b.width;
+      sprite.displayHeight = b.height;
+
+      //  Origin is (0, 1) in Tiled, so find the offset that matches the Sprites origin.
+      //  Do not offset objects with zero dimensions (e.g. points).
+      var offset = {
+        x: sprite.originX * b.width,
+        y: (sprite.originY - 1) * b.height,
+      };
+
+      sprite.x += offset.x;
+      sprite.y += offset.y;
+
+      sprite.setDataEnabled();
+
+      b.properties.forEach((p) => {
+        sprite.data.set(p.name, p.value);
+      });
+
+      this.add.existing(sprite);
+
+      // get door based on door property
+      const doorID = sprite.data.values.door;
+      var associatedDoor = this.doorObjects.find((door) => {
+        return door.data.values.doorID == doorID;
+      });
+
+      var buttonCallback = (ob1, ob2) => {
+        console.log("hello");
+      };
+
+      this.physics.add.existing(sprite, true);
+
+      var collisionCallback = (ob1, ob2) => {
+        if (associatedDoor.state == 0) {
+          associatedDoor.state = 1;
+          console.log(associatedDoor.state);
+        }
+      };
+
+      this.physics.add.overlap(
+        hackableEntity.getObject(),
+        sprite,
+        collisionCallback
+      );
+
+      return sprite;
+    });
   }
 
   update() {
+    this.doorObjects.forEach((d) => {
+      if (d.state == 0) {
+        console.log("door closed");
+      } else {
+        console.log("door opened");
+        this.physics.world.removeCollider(this.playerDoorCollider);
+      }
+    });
+
     this.playerSystem.update(this.cursors);
     this.hackableSystem.update();
   }
