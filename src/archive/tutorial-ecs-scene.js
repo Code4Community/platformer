@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import ECSScene from "./ecs-scene.js";
+import ECSScene from "../scenes/ecs-scene.js";
 import { createWorld, addEntity, addComponent } from "bitecs";
 
 import Entity from "../entity.js";
