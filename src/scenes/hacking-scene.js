@@ -36,6 +36,83 @@ export default class HackingScene extends ECSScene {
     super("hacking");
   }
 
+  interactSetup(name, idName, collider){
+    //var name and idName should be strings
+    var  objectName= objects.filter((object) => {
+        return object.type == name;
+      });
+
+      this.interactObjects = objectName.map((d) => {
+        var sprite = new Phaser.GameObjects.Sprite(this);
+        sprite.setName(d.name);
+        sprite.setPosition(d.x, d.y);
+        sprite.setTexture(name, null);
+        sprite.displayWidth = d.width;
+        sprite.displayHeight = d.height;
+  
+        //  Origin is (0, 1) in Tiled, so find the offset that matches the Sprites origin.
+        //  Do not offset objects with zero dimensions (e.g. points).
+        var offset = {
+          x: sprite.originX * d.width,
+          y: (sprite.originY - 1) * d.height,
+        };
+  
+        sprite.x += offset.x;
+        sprite.y += offset.y;
+  
+        sprite.setDataEnabled();
+        /*only for door*/
+        
+        
+        if(name == "door"){
+            sprite.data.set(idName, d.id);
+  
+            this.add.existing(sprite);
+            this.physics.add.existing(sprite, true);
+            this.collider = this.physics.add.collider(
+            player.getObject(),
+                sprite
+            );
+        }
+        /*only for button*/
+        if(name == "button"){
+      
+            d.properties.forEach((p) => {
+                sprite.data.set(p.name, p.value);
+            });
+    
+            this.add.existing(sprite);
+    
+            // get door based on door property
+            const doorID = sprite.data.values.door;
+            var associatedDoor = this.doorObjects.find((door) => {
+                return door.data.values.doorID == doorID;
+            });
+    
+            var buttonCallback = (ob1, ob2) => {
+                console.log("hello");
+            };
+    
+            this.physics.add.existing(sprite, true);
+    
+            var collisionCallback = (ob1, ob2) => {
+                if (associatedDoor.state == 0) {
+                associatedDoor.state = 1;
+                console.log(associatedDoor.state);
+                }
+            };
+    
+            this.physics.add.overlap(
+                hackableEntity.getObject(),
+                sprite,
+                collisionCallback
+            );
+        }
+          return sprite;
+        
+        });
+  }
+
   preload() {
     this.load.image("sky", skyImage);
     this.load.image("ground", groundImage);
@@ -111,7 +188,12 @@ export default class HackingScene extends ECSScene {
     var objectLayer = map.getObjectLayer("Interactables");
     var objects = objectLayer.objects;
 
-    var doors = objects.filter((object) => {
+    this.interactSetup("door", doorObjects,this.playerDoorCollider)
+    this.interactSetup("button",buttonObjects, )
+    
+    
+    
+    /*var doors = objects.filter((object) => {
       return object.type == "door";
     });
 
@@ -205,7 +287,7 @@ export default class HackingScene extends ECSScene {
       );
 
       return sprite;
-    });
+    });*/
   }
 
   update() {
@@ -217,7 +299,7 @@ export default class HackingScene extends ECSScene {
         this.physics.world.removeCollider(this.playerDoorCollider);
       }
     });
-
+    
     this.playerSystem.update(this.cursors);
     this.hackableSystem.update();
   }
