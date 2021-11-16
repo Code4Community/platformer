@@ -24,6 +24,7 @@ import { PlayerSystem } from "../systems/player-systems.js";
 import { SpriteSystem } from "../systems/phaser-systems.js";
 import { HackableSystem } from "../systems/hackable-systems.js";
 
+
 export default class HackingScene extends ECSScene {
   player;
   cursors;
@@ -32,9 +33,17 @@ export default class HackingScene extends ECSScene {
   door;
   playerDoorCollider;
 
+  
+  
+  
+
   constructor() {
     super("hacking");
+    
   }
+
+  
+  
 
   preload() {
     this.load.image("sky", skyImage);
@@ -58,6 +67,9 @@ export default class HackingScene extends ECSScene {
 
     this.load.image("mario-tiles", marioTiles);
     this.load.tilemapTiledJSON("map", superMarioMap);
+
+   
+    
   }
 
   create() {
@@ -75,6 +87,8 @@ export default class HackingScene extends ECSScene {
       collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
       faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
     });
+
+    
 
     const camera = this.cameras.main;
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -208,6 +222,9 @@ export default class HackingScene extends ECSScene {
     });
   }
 
+  
+  
+
   update() {
     this.doorObjects.forEach((d) => {
       if (d.state == 0) {
@@ -215,10 +232,22 @@ export default class HackingScene extends ECSScene {
       } else {
         console.log("door opened");
         this.physics.world.removeCollider(this.playerDoorCollider);
+
+       
       }
     });
 
+    
+
     this.playerSystem.update(this.cursors);
     this.hackableSystem.update();
+
+    
+
+   
   }
+
+  
+
+  
 }
