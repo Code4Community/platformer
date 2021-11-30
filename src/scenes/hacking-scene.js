@@ -78,7 +78,7 @@ export default class HackingScene extends ECSScene {
 
     const camera = this.cameras.main;
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    camera.setZoom(2.5);
+    camera.setZoom(2);
 
     // entities
     const player = new Entity(this, [Sprite, Player]);
@@ -110,6 +110,8 @@ export default class HackingScene extends ECSScene {
     // getting the tiled objects
     var objectLayer = map.getObjectLayer("Interactables");
     var objects = objectLayer.objects;
+
+    console.log(objects)
 
     var doors = objects.filter((object) => {
       return object.type == "door";
