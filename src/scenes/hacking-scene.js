@@ -61,24 +61,18 @@ export default class HackingScene extends ECSScene {
   }
 
   create() {
-    // The following two strings are keys inside the json.
-    var map = this.make.tilemap({ key: "map" });
-    var tileset = map.addTilesetImage("SuperMarioBros-World1-1", "mario-tiles");
-    this.layer = map.createLayer("World1", tileset, 0, 0);
-    this.layer.setCollisionByProperty({ collides: true });
-
-    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-
-    const debugGraphics = this.add.graphics().setAlpha(0.75);
-    this.layer.renderDebug(debugGraphics, {
+    const config = {
+      tilesetName: "SuperMarioBros-World1-1", // Name of tileset
+      key: "mario-tiles", // key for tileset
+      layerID: "World1", // ID of the layer being created
+      collides: true, // Update the collision flag on tiles where "collides" = true.
+      alpha: 0.75, // Opacity of tiles
       tileColor: null, // Color of non-colliding tiles
       collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
       faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-    });
-
-    const camera = this.cameras.main;
-    camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    camera.setZoom(2);
+      zoom: 2, // camera zoom
+    };
+    const [map, camera] = this.setupMapAndCamera(config);
 
     // entities
     const player = new Entity(this, [Sprite, Player]);
@@ -111,7 +105,7 @@ export default class HackingScene extends ECSScene {
     var objectLayer = map.getObjectLayer("Interactables");
     var objects = objectLayer.objects;
 
-    console.log(objects)
+    console.log(objects);
 
     var doors = objects.filter((object) => {
       return object.type == "door";
