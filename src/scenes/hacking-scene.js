@@ -24,7 +24,6 @@ import { PlayerSystem } from "../systems/player-systems.js";
 import { SpriteSystem } from "../systems/phaser-systems.js";
 import { HackableSystem } from "../systems/hackable-systems.js";
 
-
 export default class HackingScene extends ECSScene {
   player;
   cursors;
@@ -33,17 +32,9 @@ export default class HackingScene extends ECSScene {
   door;
   playerDoorCollider;
 
-  
-  
-  
-
   constructor() {
     super("hacking");
-    
   }
-
-  
-  
 
   preload() {
     this.load.image("sky", skyImage);
@@ -67,32 +58,14 @@ export default class HackingScene extends ECSScene {
 
     this.load.image("mario-tiles", marioTiles);
     this.load.tilemapTiledJSON("map", superMarioMap);
-
-   
-    
   }
 
   create() {
-    // The following two strings are keys inside the json.
-    var map = this.make.tilemap({ key: "map" });
-    var tileset = map.addTilesetImage("SuperMarioBros-World1-1", "mario-tiles");
-    this.layer = map.createLayer("World1", tileset, 0, 0);
-    this.layer.setCollisionByProperty({ collides: true });
-
-    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-
-    const debugGraphics = this.add.graphics().setAlpha(0.75);
-    this.layer.renderDebug(debugGraphics, {
-      tileColor: null, // Color of non-colliding tiles
-      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-      faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-    });
-
-    
-
-    const camera = this.cameras.main;
-    camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    camera.setZoom(2.5);
+    const map = this.setupMapAndCamera(
+      "SuperMarioBros-World1-1",
+      "mario-tiles",
+      "World1"
+    );
 
     // entities
     const player = new Entity(this, [Sprite, Player]);
@@ -119,11 +92,13 @@ export default class HackingScene extends ECSScene {
     player.getObject().x = 20;
     player.getObject().y = 150;
 
-    camera.startFollow(player.getObject());
+    this.cameras.main.startFollow(player.getObject());
 
     // getting the tiled objects
     var objectLayer = map.getObjectLayer("Interactables");
     var objects = objectLayer.objects;
+
+    console.log(objects);
 
     var doors = objects.filter((object) => {
       return object.type == "door";
@@ -222,9 +197,6 @@ export default class HackingScene extends ECSScene {
     });
   }
 
-  
-  
-
   update() {
     this.doorObjects.forEach((d) => {
       if (d.state == 0) {
@@ -232,22 +204,10 @@ export default class HackingScene extends ECSScene {
       } else {
         console.log("door opened");
         this.physics.world.removeCollider(this.playerDoorCollider);
-
-       
       }
     });
 
-    
-
     this.playerSystem.update(this.cursors);
     this.hackableSystem.update();
-
-    
-
-   
   }
-
-  
-
-  
 }
