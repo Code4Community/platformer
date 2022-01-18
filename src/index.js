@@ -19,7 +19,10 @@ const config = {
       debug: true,
     },
   },
-  scene: [LevelSelectScene, HackingScene, UIScene],
+  audio: {
+    disableWebAudio: false,
+  },
+  scene: [MainMenuScene, LevelSelectScene, HackingScene, UIScene],
 };
 
 export default new Phaser.Game(config);
