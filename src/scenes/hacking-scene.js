@@ -87,7 +87,7 @@ export default class HackingScene extends ECSScene {
     this.hackableSystem.create();
 
     this.cursors = this.input.keyboard.createCursorKeys();
-    this.scene.run("ui-scene");
+    this.scene.launch("ui");
 
     player.getObject().x = 20;
     player.getObject().y = 150;

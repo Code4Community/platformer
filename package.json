@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "bitecs": "^0.3.21-13",
+    "c4c-editor-and-interpreter": "file:../c4c-editor-and-interpreter",
     "codemirror": "^5.63.3",
     "phaser": "^3.50.0"
   }

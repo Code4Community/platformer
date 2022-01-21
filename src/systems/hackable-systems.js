@@ -1,7 +1,6 @@
 import Phaser from "phaser";
+import C4C from "c4c-editor-and-interpreter";
 import System from "./system.js";
-
-import { setEditorText, getEditorText, clearEditor } from "../editor.js";
 
 import { Hackable } from "../components/hackable-components.js";
 
@@ -20,9 +19,11 @@ function toggleHacking() {
 }
 
 function startHacking(mutableData) {
+  C4C.Editor.Window.open();
+
   if ("ai" in mutableData) {
     const ai = mutableData.ai;
-    setEditorText(ai);
+    C4C.Editor.setText(ai);
   }
 
   // eventsCenter.emit('start-hacking')
@@ -31,8 +32,8 @@ function startHacking(mutableData) {
 }
 
 function stopHacking(mutableData) {
-  const ai = getEditorText();
-  clearEditor();
+  const ai = C4C.Editor.getText();
+  C4C.Editor.Window.close();
 
   mutableData.ai = ai;
 
