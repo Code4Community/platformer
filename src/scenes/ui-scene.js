@@ -1,5 +1,14 @@
 import Phaser from "phaser";
+import C4C from "c4c-editor-and-interpreter";
 import eventsCenter from "../events-center.js";
+
+function enterButtonHoverState(btn) {
+  btn.setStyle({ fill: "#ff0" });
+}
+
+function enterButtonRestState(btn) {
+  btn.setStyle({ fill: "#fff" });
+}
 
 export default class UIScene extends Phaser.Scene {
   constructor() {
@@ -7,25 +16,16 @@ export default class UIScene extends Phaser.Scene {
   }
 
   create() {
-    const pauseLabel = this.add.text(700, 100, "Pause", {
-      fontSize: 32,
-    });
+    C4C.Editor.Window.init(this);
 
-    pauseLabel.setInteractive();
-    pauseLabel.on("pointerdown", () => {
-      if (this.scene.isPaused("tutorial")) {
-        this.scene.resume("tutorial");
-      } else {
-        this.scene.pause("tutorial");
-      }
-    });
-  }
-
-  pauseGame() {
-    this.scene.pause();
-  }
-
-  showPauseMenu() {
-    this.unPauseLabel.setVisible(true);
+    // Editor Button
+    const editorButton = this.add
+      .text(500, 40, "Toggle Editor", { fill: "#fff", fontSize: "30px" })
+      .setInteractive()
+      .on("pointerdown", () => {
+        C4C.Editor.Window.toggle();
+      })
+      .on("pointerover", () => enterButtonHoverState(editorButton))
+      .on("pointerout", () => enterButtonRestState(editorButton));
   }
 }

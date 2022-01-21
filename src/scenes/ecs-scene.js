@@ -25,4 +25,8 @@ export default class ECSScene extends Phaser.Scene {
 
     return map;
   }
+
+  setupUI() {
+    this.scene.launch("ui");
+  }
 }

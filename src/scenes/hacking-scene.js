@@ -67,6 +67,8 @@ export default class HackingScene extends ECSScene {
       "World1"
     );
 
+    this.setupUI();
+
     // entities
     const player = new Entity(this, [Sprite, Player]);
     const hackableEntity = new Entity(this, [Sprite, Enemy, Hackable]);
@@ -87,7 +89,6 @@ export default class HackingScene extends ECSScene {
     this.hackableSystem.create();
 
     this.cursors = this.input.keyboard.createCursorKeys();
-    this.scene.launch("ui");
 
     player.getObject().x = 20;
     player.getObject().y = 150;
