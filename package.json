@@ -44,6 +44,6 @@
     "bitecs": "^0.3.21-13",
     "c4c-editor-and-interpreter": "github:Code4Community/code-editor-and-interpreter#master",
     "codemirror": "^5.63.3",
-    "phaser": "^3.50.0"
+    "phaser": "^3.55.2"
   }
 }

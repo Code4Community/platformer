@@ -4,19 +4,19 @@ export default class Entity {
   world;
   scene;
   id;
+  gameobject;
 
-  constructor(scene, components) {
+  constructor(scene, gameobject, components) {
     this.scene = scene;
     this.world = scene.world;
+    this.gameobject = gameobject;
     this.id = addEntity(this.world);
 
     components.forEach((c) => {
       addComponent(this.world, c, this.id);
     });
-  }
 
-  getObject() {
-    return this.scene.globalEntityMap.get(this.id);
+    this.scene.globalEntityMap.set(this.id, this.gameobject);
   }
 
   get(component, key) {

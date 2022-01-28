@@ -48,21 +48,17 @@ class HackableSystem extends System {
   }
 
   create() {
-    const entered = this.getEntered(this.world);
+    this.forEnteredObjects((o) => {
+      o.setInteractive();
+      o.on("pointerdown", toggleHacking);
 
-    entered.forEach((entityID) => {
-      const hackableObject = this.scene.globalEntityMap.get(entityID);
-
-      hackableObject.setInteractive();
-      hackableObject.on("pointerdown", toggleHacking);
-
-      hackableObject.setDataEnabled();
-      hackableObject.data.set("hacked", false);
-      hackableObject.data.set("mutableData", {
+      o.setDataEnabled();
+      o.data.set("hacked", false);
+      o.data.set("mutableData", {
         ai: `
-hackableObject.setVelocityX(-160);
-if (hackableObject.body.blocked.down) {
-    hackableObject.setVelocityY(-350);
+o.setVelocityX(0);
+if (o.body.blocked.down) {
+    o.setVelocityY(-150);
 }
 `,
       });
@@ -70,13 +66,9 @@ if (hackableObject.body.blocked.down) {
   }
 
   update() {
-    const all = this.getAll(this.world);
-
-    all.forEach((entityID) => {
-      const hackableObject = this.scene.globalEntityMap.get(entityID);
-
-      if ("ai" in hackableObject.data.values.mutableData) {
-        const ai = hackableObject.data.values.mutableData.ai;
+    this.forAllObjects((o) => {
+      if ("ai" in o.data.values.mutableData) {
+        const ai = o.data.values.mutableData.ai;
         // This is just evaluating raw javascript for testing.  The
         // javascript is evaluated inside the environment at this
         // point. Its just like having the code written here.

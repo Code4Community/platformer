@@ -8,7 +8,9 @@ class PlayerSystem extends System {
     super(scene, [Player]);
   }
 
-  create(spriteSheetName) {
+  create() {
+    const spriteSheetName = "dude";
+
     // Register animations with the scene's animation manager
     this.scene.anims.create({
       key: "left",
@@ -36,29 +38,26 @@ class PlayerSystem extends System {
       repeat: 1,
     });
 
-    const entered = this.getEntered(this.world);
-
-    entered.forEach((entityID) => {
-      const player = this.scene.globalEntityMap.get(entityID);
-
+    // This is only for creating a single player.
+    this.forEnteredObjects((player) => {
+      player.setName("player");
       player.setBounce(0.2);
       player.setCollideWorldBounds(true);
       player.body.setGravityY(300);
 
       this.scene.physics.add.collider(player, this.scene.layer);
+      this.scene.cameras.main.startFollow(player);
     });
+
+    this.cursors = this.scene.input.keyboard.createCursorKeys();
   }
 
-  update(cursors) {
-    const all = this.getAll(this.world);
-
-    all.forEach((entityID) => {
-      const player = this.scene.globalEntityMap.get(entityID);
-
-      if (cursors.left.isDown) {
+  update() {
+    this.forAllObjects((player) => {
+      if (this.cursors.left.isDown) {
         player.setVelocityX(-160);
         player.anims.play("left", true);
-      } else if (cursors.right.isDown) {
+      } else if (this.cursors.right.isDown) {
         player.setVelocityX(160);
         player.anims.play("right", true);
       } else {
@@ -66,7 +65,7 @@ class PlayerSystem extends System {
         player.anims.play("turn");
       }
 
-      if (cursors.up.isDown && player.body.blocked.down) {
+      if (this.cursors.up.isDown && player.body.blocked.down) {
         player.setVelocityY(-350);
       }
     });

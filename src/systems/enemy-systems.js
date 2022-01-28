@@ -9,11 +9,7 @@ class EnemySystem extends System {
   }
 
   create() {
-    const entered = this.getEntered(this.world);
-
-    entered.forEach((entityID) => {
-      const enemy = this.scene.globalEntityMap.get(entityID);
-
+    this.forEnteredObjects((enemy) => {
       enemy.setBounce(0.2);
       enemy.setCollideWorldBounds(true);
       enemy.body.setGravityY(300);
