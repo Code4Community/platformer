@@ -3,7 +3,53 @@ import System from "./system.js";
 
 import { Player } from "../components/player-components.js";
 import { Enemy } from "../components/enemy-components.js";
-import { Door, Button } from "../components/interactable-components.js";
+import { Flag, Door, Button } from "../components/interactable-components.js";
+
+class FlagSystem extends System {
+  constructor(scene) {
+    super(scene, [Flag]);
+  }
+
+  create() {
+    const playerGroup = this.getComponentSpriteGroup([Player]);
+    const flags = this.scene.map.filterObjects(
+      "Interactables",
+      (o) => o.type == "flag"
+    );
+
+    flags.forEach((flag) => {
+      const sprite = new Phaser.GameObjects.Sprite(this.scene);
+      sprite.setName(flag.name);
+      sprite.setPosition(flag.x, flag.y);
+      sprite.setTexture("flag", null);
+      sprite.displayWidth = flag.width;
+      sprite.displayHeight = flag.height;
+
+      //  Origin is (0, 1) in Tiled, so find the offset that matches the Sprites origin.
+      //  Do not offset objects with zero dimensions (e.g. points).
+      var offset = {
+        x: sprite.originX * flag.width,
+        y: (sprite.originY - 1) * flag.height,
+      };
+
+      sprite.x += offset.x;
+      sprite.y += offset.y;
+      sprite.state = 0;
+
+      const flagTouchCallback = (o1, o2) => {
+        o1.scene.win();
+      };
+
+      this.scene.add.existing(sprite);
+      this.scene.physics.add.existing(sprite, true);
+      this.scene.physics.add.overlap(playerGroup, sprite, flagTouchCallback);
+    });
+  }
+
+  update() {}
+
+  exit() {}
+}
 
 const doorMap = new Map();
 
@@ -102,4 +148,4 @@ class ButtonSystem extends System {
   exit() {}
 }
 
-export { DoorSystem, ButtonSystem };
+export { FlagSystem, DoorSystem, ButtonSystem };

@@ -18,6 +18,7 @@ export default class LevelSelectScene extends Phaser.Scene {
       fontSize: "32px",
       fill: "#fff",
     });
+
     this.levelOneText.setInteractive();
     this.levelOneText.on("pointerdown", () => {
       this.scene.start("hacking");

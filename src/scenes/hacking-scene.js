@@ -1,5 +1,6 @@
 import C4C from "c4c-editor-and-interpreter";
 import ECSScene from "./ecs-scene.js";
+import { resetWorld } from "bitecs";
 
 import skyImage from "../assets/sky.png";
 import groundImage from "../assets/platform.png";
@@ -8,6 +9,7 @@ import bombImage from "../assets/bomb.png";
 import dudeSpriteSheet from "../assets/dude.png";
 import doorSpriteSheet from "../assets/door.png";
 import buttonSpriteSheet from "../assets/button.png";
+import flagSpriteSheet from "../assets/flag.png";
 import marioTiles from "../assets/mario-tiles.png";
 import superMarioMap from "../assets/super-mario-map.json";
 
@@ -21,7 +23,11 @@ import { EnemySystem } from "../systems/enemy-systems.js";
 import { PlayerSystem } from "../systems/player-systems.js";
 import { SpriteSystem } from "../systems/phaser-systems.js";
 import { HackableSystem } from "../systems/hackable-systems.js";
-import { DoorSystem, ButtonSystem } from "../systems/interactable-systems.js";
+import {
+  FlagSystem,
+  DoorSystem,
+  ButtonSystem,
+} from "../systems/interactable-systems.js";
 
 export default class HackingScene extends ECSScene {
   constructor() {
@@ -48,13 +54,18 @@ export default class HackingScene extends ECSScene {
       frameHeight: 16,
     });
 
+    this.load.spritesheet("flag", flagSpriteSheet, {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
     this.load.image("mario-tiles", marioTiles);
     this.load.tilemapTiledJSON("map", superMarioMap);
   }
 
   create() {
     // systems
-    //this.spriteSystem = new SpriteSystem(this);
+    this.flagSystem = new FlagSystem(this);
     this.playerSystem = new PlayerSystem(this);
     this.enemySystem = new EnemySystem(this);
     this.hackableSystem = new HackableSystem(this);
@@ -85,25 +96,44 @@ export default class HackingScene extends ECSScene {
       hackableEntity.setVelocityX(40);
     });
 
+    C4C.Interpreter.define("jump", function () {
+      if (hackableEntity.body.blocked.down) {
+        hackableEntity.setVelocityY(-150);
+      }
+    });
+
     this.addEntity(player, [Player]);
     this.addEntity(hackableEntity, [Enemy, Hackable]);
 
-    // Create Everything
-    // this.spriteSystem.create();
-
-    // These two are currently responsible for making the door and button
-    // game objects. If you had a hackable doors or buttons, these need to come
-    // before the hackable system.
+    // These two are currently responsible for making the door and button game
+    // objects. If you had a hackable doors or buttons, these need to come
+    // before the hackable system. This will change when we abstract these into
+    // ecs-scene.
+    this.flagSystem.create();
     this.doorSystem.create();
     this.buttonSystem.create();
-
     this.playerSystem.create();
     this.enemySystem.create();
     this.hackableSystem.create();
+
+    this.events.on("shutdown", () => {
+      console.log("Shutting down");
+      resetWorld(this.world);
+    });
   }
 
   update() {
+    this.flagSystem.update();
+    this.doorSystem.update();
+    this.buttonSystem.update();
     this.playerSystem.update();
+    this.enemySystem.update();
     this.hackableSystem.update();
+  }
+
+  win() {
+    this.scene.stop();
+    this.scene.stop("ui");
+    this.scene.start("level-select");
   }
 }

@@ -6,4 +6,6 @@ const Door = defineComponent({
 
 const Button = defineComponent();
 
-export { Door, Button };
+const Flag = defineComponent();
+
+export { Flag, Door, Button };
