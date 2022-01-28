@@ -1,3 +1,4 @@
+import C4C from "c4c-editor-and-interpreter";
 import ECSScene from "./ecs-scene.js";
 
 import skyImage from "../assets/sky.png";
@@ -7,7 +8,6 @@ import bombImage from "../assets/bomb.png";
 import dudeSpriteSheet from "../assets/dude.png";
 import doorSpriteSheet from "../assets/door.png";
 import buttonSpriteSheet from "../assets/button.png";
-
 import marioTiles from "../assets/mario-tiles.png";
 import superMarioMap from "../assets/super-mario-map.json";
 
@@ -16,6 +16,7 @@ import { Player } from "../components/player-components.js";
 import { Sprite } from "../components/phaser-components.js";
 import { Hackable } from "../components/hackable-components.js";
 import { Door, Button } from "../components/interactable-components.js";
+
 import { EnemySystem } from "../systems/enemy-systems.js";
 import { PlayerSystem } from "../systems/player-systems.js";
 import { SpriteSystem } from "../systems/phaser-systems.js";
@@ -71,9 +72,17 @@ export default class HackingScene extends ECSScene {
       properties: {
         ai: "moveLeft()",
       },
-      update: function () {
+      update: function (ai) {
         C4C.Interpreter.run(ai);
       },
+    });
+
+    C4C.Interpreter.define("moveLeft", function () {
+      hackableEntity.setVelocityX(-40);
+    });
+
+    C4C.Interpreter.define("moveRight", function () {
+      hackableEntity.setVelocityX(40);
     });
 
     this.addEntity(player, [Player]);
@@ -81,11 +90,16 @@ export default class HackingScene extends ECSScene {
 
     // Create Everything
     // this.spriteSystem.create();
+
+    // These two are currently responsible for making the door and button
+    // game objects. If you had a hackable doors or buttons, these need to come
+    // before the hackable system.
+    this.doorSystem.create();
+    this.buttonSystem.create();
+
     this.playerSystem.create();
     this.enemySystem.create();
     this.hackableSystem.create();
-    this.doorSystem.create();
-    this.buttonSystem.create();
   }
 
   update() {

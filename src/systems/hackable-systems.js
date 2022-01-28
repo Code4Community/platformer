@@ -6,40 +6,28 @@ import { Hackable } from "../components/hackable-components.js";
 
 function toggleHacking() {
   let entity = this;
-  let entityData = entity.data.values;
-  let mutableData = entityData.mutableData;
 
-  if (entityData.hacked) {
-    stopHacking(mutableData);
-    entityData.hacked = false;
+  if (entity.data.get("hacked")) {
+    stopHacking(entity);
+    entity.data.set("hacked", false);
   } else {
-    startHacking(mutableData);
-    entityData.hacked = true;
+    startHacking(entity);
+    entity.data.set("hacked", true);
   }
 }
 
-function startHacking(mutableData) {
+function startHacking(entity) {
   C4C.Editor.Window.open();
 
-  if ("ai" in mutableData) {
-    const ai = mutableData.ai;
+  if ("ai" in entity.data.get("hackable").properties) {
+    const ai = entity.data.get("hackable").properties.ai;
     C4C.Editor.setText(ai);
   }
-
-  // eventsCenter.emit('start-hacking')
-
-  // Pause the game
 }
 
-function stopHacking(mutableData) {
+function stopHacking(entity) {
   const ai = C4C.Editor.getText();
-  C4C.Editor.Window.close();
-
-  mutableData.ai = ai;
-
-  // eventsCenter.emit('stop-hacking')
-
-  // Un-pause the game
+  entity.data.values.hackable.properties.ai = ai;
 }
 
 class HackableSystem extends System {
@@ -51,29 +39,16 @@ class HackableSystem extends System {
     this.forEnteredObjects((o) => {
       o.setInteractive();
       o.on("pointerdown", toggleHacking);
-
-      o.setDataEnabled();
       o.data.set("hacked", false);
-      o.data.set("mutableData", {
-        ai: `
-o.setVelocityX(0);
-if (o.body.blocked.down) {
-    o.setVelocityY(-150);
-}
-`,
-      });
     });
   }
 
   update() {
     this.forAllObjects((o) => {
-      if ("ai" in o.data.values.mutableData) {
-        const ai = o.data.values.mutableData.ai;
-        // This is just evaluating raw javascript for testing.  The
-        // javascript is evaluated inside the environment at this
-        // point. Its just like having the code written here.
-        eval(ai);
-      }
+      // Could be replaced with a map.
+      const updateFunc = o.data.get("hackable").update;
+      const ai = o.data.get("hackable").properties.ai;
+      updateFunc(ai);
     });
   }
 
