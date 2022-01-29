@@ -3,7 +3,7 @@ import C4C from "c4c-editor-and-interpreter";
 
 import MainMenuScene from "./scenes/main-menu-scene.js";
 import LevelSelectScene from "./scenes/level-select-scene.js";
-import HackingScene from "./scenes/hacking-scene.js";
+import GameScene from "./scenes/game-scene.js";
 import UIScene from "./scenes/ui-scene.js";
 
 import "./css/style.css";
@@ -20,13 +20,13 @@ const config = {
     default: "arcade",
     arcade: {
       gravity: { y: 300 },
-      debug: true,
+      debug: false,
     },
   },
   dom: {
     createContainer: true,
   },
-  scene: [LevelSelectScene, HackingScene, UIScene],
+  scene: [MainMenuScene, LevelSelectScene, GameScene, UIScene],
 };
 
 export default new Phaser.Game(config);

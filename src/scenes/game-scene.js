@@ -29,7 +29,7 @@ import {
   ButtonSystem,
 } from "../systems/interactable-systems.js";
 
-export default class HackingScene extends ECSScene {
+export default class GameScene extends ECSScene {
   constructor() {
     super("hacking");
   }
@@ -105,6 +105,10 @@ export default class HackingScene extends ECSScene {
     this.addEntity(player, [Player]);
     this.addEntity(hackableEntity, [Enemy, Hackable]);
 
+    this.events.on("shutdown", () => {
+      resetWorld(this.world);
+    });
+
     // These two are currently responsible for making the door and button game
     // objects. If you had a hackable doors or buttons, these need to come
     // before the hackable system. This will change when we abstract these into
@@ -115,11 +119,6 @@ export default class HackingScene extends ECSScene {
     this.playerSystem.create();
     this.enemySystem.create();
     this.hackableSystem.create();
-
-    this.events.on("shutdown", () => {
-      console.log("Shutting down");
-      resetWorld(this.world);
-    });
   }
 
   update() {
