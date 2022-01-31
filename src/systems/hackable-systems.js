@@ -7,27 +7,30 @@ import { Hackable } from "../components/hackable-components.js";
 function toggleHacking() {
   let entity = this;
 
-  if (entity.data.get("hacked")) {
+  if (entity.getData("hacked")) {
     stopHacking(entity);
-    entity.data.set("hacked", false);
+    entity.setData("hacked", false);
   } else {
     startHacking(entity);
-    entity.data.set("hacked", true);
+    entity.setData("hacked", true);
   }
 }
 
 function startHacking(entity) {
+  entity.scene.input.keyboard.disableGlobalCapture();
   C4C.Editor.Window.open();
 
-  if ("ai" in entity.data.get("hackable").properties) {
-    const ai = entity.data.get("hackable").properties.ai;
+  if ("ai" in entity.getData("hackable").properties) {
+    const ai = entity.getData("hackable").properties.ai;
     C4C.Editor.setText(ai);
   }
 }
 
 function stopHacking(entity) {
-  const ai = C4C.Editor.getText();
-  entity.data.values.hackable.properties.ai = ai;
+  entity.scene.input.keyboard.enableGlobalCapture();
+  C4C.Editor.Window.close();
+
+  entity.data.values.hackable.properties.ai = C4C.Editor.getText();
 }
 
 class HackableSystem extends System {
@@ -37,17 +40,19 @@ class HackableSystem extends System {
 
   create() {
     this.forEnteredObjects((o) => {
-      o.setInteractive();
+      o.setInteractive({
+        useHandCursor: true,
+      });
       o.on("pointerdown", toggleHacking);
-      o.data.set("hacked", false);
+      o.setData("hacked", false);
     });
   }
 
   update() {
     this.forAllObjects((o) => {
       // Could be replaced with a map.
-      const updateFunc = o.data.get("hackable").update;
-      const ai = o.data.get("hackable").properties.ai;
+      const updateFunc = o.getData("hackable").update;
+      const ai = o.getData("hackable").properties.ai;
       updateFunc(ai);
     });
   }
