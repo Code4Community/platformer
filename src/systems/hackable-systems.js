@@ -62,6 +62,9 @@ class HackableSystem extends System {
         } catch (err) {
           alert(err + " Oops.");
           hasError = true;
+
+          o.setVelocityX(0);
+          o.setVelocityY(0);
         }
       }
     });
