@@ -3,15 +3,14 @@ import C4C from "c4c-editor-and-interpreter";
 import System from "./system.js";
 
 import { Hackable } from "../components/hackable-components.js";
-let firstError = false;
+
+let hasError = false;
+
 function toggleHacking() {
   let entity = this;
 
   if (entity.getData("hacked")) {
     stopHacking(entity);
-      if(!firstError) {
-        firstError = true;
-      }
     entity.setData("hacked", false);
   } else {
     startHacking(entity);
@@ -34,6 +33,7 @@ function stopHacking(entity) {
   C4C.Editor.Window.close();
 
   entity.data.values.hackable.properties.ai = C4C.Editor.getText();
+  hasError = false;
 }
 
 class HackableSystem extends System {
@@ -48,7 +48,6 @@ class HackableSystem extends System {
       o.on("pointerdown", toggleHacking);
       o.setData("hacked", false);
     });
-
   }
 
   update() {
@@ -56,13 +55,13 @@ class HackableSystem extends System {
       // Could be replaced with a map.
       const updateFunc = o.getData("hackable").update;
       const ai = o.getData("hackable").properties.ai;
-      try {
-        updateFunc(ai);
-      }
-      catch(err) {
-        if(firstError){
-          alert(ai+" is not a valid function");
-          firstError = false;
+
+      if (!hasError) {
+        try {
+          updateFunc(ai);
+        } catch (err) {
+          alert(err + " Oops.");
+          hasError = true;
         }
       }
     });
