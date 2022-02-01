@@ -29,9 +29,11 @@ import {
   ButtonSystem,
 } from "../systems/interactable-systems.js";
 
+var willExit = false;
+
 export default class GameScene extends ECSScene {
   constructor() {
-    super("hacking");
+    super("game");
   }
 
   preload() {
@@ -64,6 +66,8 @@ export default class GameScene extends ECSScene {
   }
 
   create() {
+    willExit = false;
+
     // systems
     this.flagSystem = new FlagSystem(this);
     this.playerSystem = new PlayerSystem(this);
@@ -102,6 +106,18 @@ export default class GameScene extends ECSScene {
       }
     });
 
+    C4C.Interpreter.define("isOnGround", function () {
+      return hackableEntity.body.blocked.down;
+    });
+
+    C4C.UI.popup({
+      mainScene: this,
+      uiScene: this.scene.get("ui"),
+      pausing: true,
+      text: "Touch the blue square to win.",
+      hasButton: true,
+    });
+
     this.addEntity(player, [Player]);
     this.addEntity(hackableEntity, [Enemy, Hackable]);
 
@@ -130,9 +146,29 @@ export default class GameScene extends ECSScene {
     this.hackableSystem.update();
   }
 
-  win() {
+  exit() {
     this.scene.stop();
     this.scene.stop("ui");
     this.scene.start("level-select");
+  }
+
+  win() {
+    if (!willExit) {
+      this.time.addEvent({
+        delay: 2000,
+        callback: this.exit,
+        callbackScope: this,
+      });
+      willExit = true;
+    }
+
+    C4C.UI.popup({
+      mainScene: this,
+      uiScene: this.scene.get("ui"),
+      pausing: false,
+      text: "You Win!",
+      hasButton: false,
+    });
+    this.playerSystem.win();
   }
 }
