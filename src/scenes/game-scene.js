@@ -7,6 +7,7 @@ import groundImage from "../assets/platform.png";
 import starImage from "../assets/star.png";
 import bombImage from "../assets/bomb.png";
 import dudeSpriteSheet from "../assets/dude.png";
+import robotSpriteSheet from "../assets/robot.png";
 import doorSpriteSheet from "../assets/door.png";
 import buttonSpriteSheet from "../assets/button.png";
 import flagSpriteSheet from "../assets/flag.png";
@@ -46,6 +47,11 @@ export default class GameScene extends ECSScene {
       frameHeight: 48,
     });
 
+    this.load.spritesheet("robot", robotSpriteSheet, {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
     this.load.spritesheet("door", doorSpriteSheet, {
       frameWidth: 16,
       frameHeight: 48,
@@ -80,7 +86,7 @@ export default class GameScene extends ECSScene {
     this.setupUI();
 
     const player = this.physics.add.sprite(20, 150, "dude");
-    const hackableEntity = this.physics.add.sprite(20, 20, "dude");
+    const hackableEntity = this.physics.add.sprite(20, 20, "robot");
 
     hackableEntity.setDataEnabled();
     hackableEntity.setData("hackable", {
