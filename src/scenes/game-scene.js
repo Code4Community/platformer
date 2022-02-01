@@ -7,6 +7,7 @@ import groundImage from "../assets/platform.png";
 import starImage from "../assets/star.png";
 import bombImage from "../assets/bomb.png";
 import dudeSpriteSheet from "../assets/dude.png";
+import robotSpriteSheet from "../assets/robot.png";
 import doorSpriteSheet from "../assets/door.png";
 import buttonSpriteSheet from "../assets/button.png";
 import flagSpriteSheet from "../assets/flag.png";
@@ -29,9 +30,11 @@ import {
   ButtonSystem,
 } from "../systems/interactable-systems.js";
 
+var willExit = false;
+
 export default class GameScene extends ECSScene {
   constructor() {
-    super("hacking");
+    super("game");
   }
 
   preload() {
@@ -42,6 +45,11 @@ export default class GameScene extends ECSScene {
     this.load.spritesheet("dude", dudeSpriteSheet, {
       frameWidth: 32,
       frameHeight: 48,
+    });
+
+    this.load.spritesheet("robot", robotSpriteSheet, {
+      frameWidth: 32,
+      frameHeight: 32,
     });
 
     this.load.spritesheet("door", doorSpriteSheet, {
@@ -64,6 +72,8 @@ export default class GameScene extends ECSScene {
   }
 
   create() {
+    willExit = false;
+
     // systems
     this.flagSystem = new FlagSystem(this);
     this.playerSystem = new PlayerSystem(this);
@@ -76,7 +86,7 @@ export default class GameScene extends ECSScene {
     this.setupUI();
 
     const player = this.physics.add.sprite(20, 150, "dude");
-    const hackableEntity = this.physics.add.sprite(20, 20, "dude");
+    const hackableEntity = this.physics.add.sprite(20, 20, "robot");
 
     hackableEntity.setDataEnabled();
     hackableEntity.setData("hackable", {
@@ -100,6 +110,18 @@ export default class GameScene extends ECSScene {
       if (hackableEntity.body.blocked.down) {
         hackableEntity.setVelocityY(-150);
       }
+    });
+
+    C4C.Interpreter.define("isOnGround", function () {
+      return hackableEntity.body.blocked.down;
+    });
+
+    C4C.UI.popup({
+      mainScene: this,
+      uiScene: this.scene.get("ui"),
+      pausing: true,
+      text: "Touch the blue square to win.",
+      hasButton: true,
     });
 
     this.addEntity(player, [Player]);
@@ -130,9 +152,29 @@ export default class GameScene extends ECSScene {
     this.hackableSystem.update();
   }
 
-  win() {
+  exit() {
     this.scene.stop();
     this.scene.stop("ui");
     this.scene.start("level-select");
+  }
+
+  win() {
+    if (!willExit) {
+      this.time.addEvent({
+        delay: 2000,
+        callback: this.exit,
+        callbackScope: this,
+      });
+      willExit = true;
+    }
+
+    C4C.UI.popup({
+      mainScene: this,
+      uiScene: this.scene.get("ui"),
+      pausing: false,
+      text: "You Win!",
+      hasButton: false,
+    });
+    this.playerSystem.win();
   }
 }

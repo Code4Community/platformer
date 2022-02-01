@@ -21,7 +21,7 @@ export default class LevelSelectScene extends Phaser.Scene {
 
     this.levelOneText.setInteractive();
     this.levelOneText.on("pointerdown", () => {
-      this.scene.start("hacking");
+      this.scene.start("game");
     });
   }
 

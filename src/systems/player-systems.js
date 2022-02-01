@@ -44,6 +44,7 @@ class PlayerSystem extends System {
       player.setBounce(0.2);
       player.setCollideWorldBounds(true);
       player.body.setGravityY(300);
+      player.setDataEnabled();
 
       this.scene.physics.add.collider(player, this.scene.layer);
       this.scene.cameras.main.startFollow(player);
@@ -54,24 +55,37 @@ class PlayerSystem extends System {
 
   update() {
     this.forAllObjects((player) => {
-      if (this.cursors.left.isDown) {
-        player.setVelocityX(-160);
-        player.anims.play("left", true);
-      } else if (this.cursors.right.isDown) {
-        player.setVelocityX(160);
-        player.anims.play("right", true);
-      } else {
+      if (player.getData("celebrating")) {
         player.setVelocityX(0);
         player.anims.play("turn");
-      }
 
-      if (this.cursors.up.isDown && player.body.blocked.down) {
-        player.setVelocityY(-350);
+        if (player.body.blocked.down) {
+          player.setVelocityY(-250);
+        }
+      } else {
+        if (this.cursors.left.isDown) {
+          player.setVelocityX(-160);
+          player.anims.play("left", true);
+        } else if (this.cursors.right.isDown) {
+          player.setVelocityX(160);
+          player.anims.play("right", true);
+        } else {
+          player.setVelocityX(0);
+          player.anims.play("turn");
+        }
+
+        if (this.cursors.up.isDown && player.body.blocked.down) {
+          player.setVelocityY(-350);
+        }
       }
     });
   }
 
-  exit() {}
+  win() {
+    this.forAllObjects((player) => {
+      player.setData("celebrating", true);
+    });
+  }
 }
 
 export { PlayerSystem };
