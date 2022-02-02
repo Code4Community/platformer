@@ -17,3 +17,6 @@ For more details, read <https://github.com/Code4Community/platformer/blob/master
 
 Learn more about webpack, phaser, and this project's architecture here:
 <https://github.com/Code4Community/platformer/tree/master/doc/developing> 
+
+## Contribution Policy
+This project is closed to outside contributions while it is in active development.
