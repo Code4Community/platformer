@@ -47,7 +47,7 @@ class PlayerSystem extends System {
       player.setDataEnabled();
 
       this.scene.physics.add.collider(player, this.scene.layer);
-      this.scene.cameras.main.startFollow(player);
+      this.scene.cameras.main.startFollow(player, false, 0.1, 0.1);
     });
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();

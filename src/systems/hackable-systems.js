@@ -5,20 +5,24 @@ import System from "./system.js";
 import { Hackable } from "../components/hackable-components.js";
 
 let hasError = false;
+let normalTarget = null;
 
 function toggleHacking() {
-  let entity = this;
-
-  if (entity.getData("hacked")) {
-    stopHacking(entity);
-    entity.setData("hacked", false);
+  if (this.getData("hacked")) {
+    stopHacking(this);
+    this.setData("hacked", false);
   } else {
-    startHacking(entity);
-    entity.setData("hacked", true);
+    startHacking(this);
+    this.setData("hacked", true);
   }
 }
 
 function startHacking(entity) {
+  const cam = entity.scene.cameras.main;
+  cam.stopFollow();
+  cam.pan(entity.x, entity.y, 1000, "Power2");
+  cam.zoomTo(12, 1000);
+
   entity.scene.input.keyboard.disableGlobalCapture();
   C4C.Editor.Window.open();
 
@@ -29,6 +33,14 @@ function startHacking(entity) {
 }
 
 function stopHacking(entity) {
+  const cam = entity.scene.cameras.main;
+  cam.pan(0, 0, 1000, "Power2", false, (cam, status) => {
+    if (status == 1.0) {
+      cam.startFollow(normalTarget, false, 0.1, 0.1);
+    }
+  });
+  cam.zoomTo(2.5, 1000);
+
   entity.scene.input.keyboard.enableGlobalCapture();
   C4C.Editor.Window.close();
 
@@ -40,7 +52,12 @@ class HackableSystem extends System {
   constructor(scene) {
     super(scene, [Hackable]);
   }
+
   create() {
+    // This relies on the camera already being set to follow someone. Not the
+    // best.
+    normalTarget = this.scene.cameras.main._follow;
+
     this.forEnteredObjects((o) => {
       o.setInteractive({
         useHandCursor: true,

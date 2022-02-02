@@ -85,13 +85,13 @@ export default class GameScene extends ECSScene {
     this.setupMapAndCamera("SuperMarioBros-World1-1", "mario-tiles", "World1");
     this.setupUI();
 
-    const player = this.physics.add.sprite(20, 150, "dude");
-    const hackableEntity = this.physics.add.sprite(20, 20, "robot");
+    const player = this.physics.add.sprite(40, 150, "dude");
+    const hackableEntity = this.physics.add.sprite(40, 40, "robot");
 
     hackableEntity.setDataEnabled();
     hackableEntity.setData("hackable", {
       properties: {
-        ai: "moveLeft()",
+        ai: "jump",
       },
       update: function (ai) {
         C4C.Interpreter.run(ai);
@@ -108,7 +108,7 @@ export default class GameScene extends ECSScene {
 
     C4C.Interpreter.define("jump", function () {
       if (hackableEntity.body.blocked.down) {
-        hackableEntity.setVelocityY(-150);
+        hackableEntity.setVelocityY(-100);
       }
     });
 
