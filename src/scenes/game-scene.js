@@ -86,16 +86,12 @@ export default class GameScene extends ECSScene {
     this.setupUI();
 
     const player = this.physics.add.sprite(40, 150, "dude");
-    const hackableEntity = this.physics.add.sprite(40, 40, "robot");
+    const hackableEntity = this.physics.add.sprite(70, 40, "robot");
 
     hackableEntity.setDataEnabled();
-    hackableEntity.setData("hackable", {
-      properties: {
-        ai: "jump",
-      },
-      update: function (ai) {
-        C4C.Interpreter.run(ai);
-      },
+    hackableEntity.setData("ai", "jump");
+    hackableEntity.setData("update-function", function (ai) {
+      C4C.Interpreter.run(ai);
     });
 
     C4C.Interpreter.define("moveLeft", function () {
