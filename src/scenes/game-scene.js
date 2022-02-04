@@ -32,8 +32,15 @@ import {
 } from "../systems/interactable-systems.js";
 
 export default class GameScene extends ECSScene {
-  constructor() {
-    super("game");
+  constructor(key) {
+    super(key);
+
+    this.flagSystem = new FlagSystem(this);
+    this.playerSystem = new PlayerSystem(this);
+    this.enemySystem = new EnemySystem(this);
+    this.hackableSystem = new HackableSystem(this);
+    this.doorSystem = new DoorSystem(this);
+    this.buttonSystem = new ButtonSystem(this);
   }
 
   preload() {
@@ -71,55 +78,11 @@ export default class GameScene extends ECSScene {
   }
 
   create() {
-    // systems
-    this.flagSystem = new FlagSystem(this);
-    this.playerSystem = new PlayerSystem(this);
-    this.enemySystem = new EnemySystem(this);
-    this.hackableSystem = new HackableSystem(this);
-    this.doorSystem = new DoorSystem(this);
-    this.buttonSystem = new ButtonSystem(this);
-
     this.setupMapAndCamera("SuperMarioBros-World1-1", "mario-tiles", "World1");
     this.setupUI();
 
-    const player = this.physics.add.sprite(40, 150, "dude");
-    const hackableEntity = this.physics.add.sprite(70, 40, "robot");
-    hackableEntity.setName("enemy");
+    this.levelCreate();
 
-    hackableEntity.setDataEnabled();
-    hackableEntity.setData("ai", "jump");
-    hackableEntity.setData("update-function", function (ai) {
-      C4C.Interpreter.run(ai);
-    });
-
-    C4C.Interpreter.define("moveLeft", function () {
-      hackableEntity.setVelocityX(-40);
-    });
-
-    C4C.Interpreter.define("moveRight", function () {
-      hackableEntity.setVelocityX(40);
-    });
-
-    C4C.Interpreter.define("jump", function () {
-      if (hackableEntity.body.blocked.down) {
-        hackableEntity.setVelocityY(-200);
-      }
-    });
-
-    C4C.Interpreter.define("isOnGround", function () {
-      return hackableEntity.body.blocked.down;
-    });
-
-    C4C.UI.popup({
-      mainScene: this,
-      uiScene: this.scene.get("ui"),
-      pausing: true,
-      text: "Touch the blue square to win.",
-      hasButton: true,
-    });
-
-    this.addEntity(player, [Player]);
-    this.addEntity(hackableEntity, [Enemy, Hackable]);
     eventsCenter.once("win", () => {
       C4C.UI.popup({
         mainScene: this,
