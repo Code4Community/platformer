@@ -4,7 +4,7 @@ import skyImage from "../assets/sky.png";
 
 export default class MainMenuScene extends Phaser.Scene {
   constructor() {
-    super("main-menu");
+    super("MainMenu");
   }
 
   preload() {
@@ -19,7 +19,7 @@ export default class MainMenuScene extends Phaser.Scene {
     });
     this.playText.setInteractive();
     this.playText.on("pointerdown", () => {
-      this.scene.start("level-select");
+      this.scene.start("LevelSelect");
     });
   }
 

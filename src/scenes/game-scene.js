@@ -127,6 +127,6 @@ export default class GameScene extends ECSScene {
     eventsCenter.destroy();
     this.scene.stop();
     this.scene.stop("ui");
-    this.scene.start("level-select");
+    this.scene.start("LevelSelect");
   }
 }

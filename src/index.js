@@ -4,7 +4,7 @@ import C4C from "c4c-editor-and-interpreter";
 import MainMenuScene from "./scenes/main-menu-scene.js";
 import LevelSelectScene from "./scenes/level-select-scene.js";
 import UIScene from "./scenes/ui-scene.js";
-import LevelOne from "./levels.js";
+import levels from "./levels.js";
 
 import "./css/style.css";
 
@@ -26,7 +26,7 @@ const config = {
   dom: {
     createContainer: true,
   },
-  scene: [MainMenuScene, LevelSelectScene, LevelOne, UIScene],
+  scene: [MainMenuScene, LevelSelectScene, UIScene].concat(levels),
 };
 
 export default new Phaser.Game(config);

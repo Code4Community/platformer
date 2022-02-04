@@ -81,6 +81,8 @@ export default class UIScene extends Phaser.Scene {
   }
 
   create() {
+    this.scene.bringToTop();
+
     C4C.Editor.Window.init(this);
 
     const saveButton = this.add

@@ -1,10 +1,11 @@
 import Phaser from "phaser";
 
 import skyImage from "../assets/sky.png";
+import levels from "../levels.js";
 
 export default class LevelSelectScene extends Phaser.Scene {
   constructor() {
-    super("level-select");
+    super("LevelSelect");
   }
 
   preload() {
@@ -14,14 +15,29 @@ export default class LevelSelectScene extends Phaser.Scene {
   create() {
     this.add.image(400, 300, "sky");
 
-    this.levelOneText = this.add.text(300, 100, "level one", {
-      fontSize: "32px",
-      fill: "#fff",
+    const levelButtonGroup = this.add.group();
+
+    levels.forEach((level) => {
+      const levelText = this.add.text(0, 0, level.name, {
+        fontSize: "32px",
+        fill: "#fff",
+      });
+
+      levelText.setInteractive();
+      levelText.on("pointerdown", () => {
+        this.scene.start(level.name);
+      });
+
+      levelButtonGroup.add(levelText);
     });
 
-    this.levelOneText.setInteractive();
-    this.levelOneText.on("pointerdown", () => {
-      this.scene.start("level-1");
+    Phaser.Actions.GridAlign(levelButtonGroup.getChildren(), {
+      width: -1,
+      height: -1,
+      cellWidth: 200,
+      cellHeight: 10,
+      x: 200,
+      y: 100,
     });
   }
 
