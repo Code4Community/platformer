@@ -40,18 +40,17 @@ class HackableSystem extends System {
   update() {
     this.forAllObjects((o) => {
       // Could be replaced with a map.
-      const updateFunc = o.getData("update-function");
       const ai = o.getData("ai");
 
       if (!hasError) {
         try {
-          updateFunc(ai);
+          C4C.Interpreter.run(ai);
         } catch (err) {
           alert(err + " Oops.");
           hasError = true;
 
-          o.setVelocityX(0);
-          o.setVelocityY(0);
+          o.body.setVelocityX(0);
+          o.body.setVelocityY(0);
         }
       }
     });

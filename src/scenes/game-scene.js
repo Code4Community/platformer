@@ -13,7 +13,6 @@ import doorSpriteSheet from "../assets/door.png";
 import buttonSpriteSheet from "../assets/button.png";
 import flagSpriteSheet from "../assets/flag.png";
 import marioTiles from "../assets/mario-tiles.png";
-import superMarioMap from "../assets/super-mario-map.json";
 
 import { Enemy } from "../components/enemy-components.js";
 import { Player } from "../components/player-components.js";
@@ -74,14 +73,12 @@ export default class GameScene extends ECSScene {
     });
 
     this.load.image("mario-tiles", marioTiles);
-    this.load.tilemapTiledJSON("map", superMarioMap);
+    this.load.tilemapTiledJSON("map", this.tilemapPath);
   }
 
   create() {
-    this.setupMapAndCamera("SuperMarioBros-World1-1", "mario-tiles", "World1");
+    this.setupMapAndCamera();
     this.setupUI();
-
-    this.levelCreate();
 
     eventsCenter.once("win", () => {
       C4C.UI.popup({
@@ -104,6 +101,10 @@ export default class GameScene extends ECSScene {
     this.flagSystem.createSprites();
     this.doorSystem.createSprites();
     this.buttonSystem.createSprites();
+    this.playerSystem.createSprites();
+    this.enemySystem.createSprites();
+
+    this.levelCreate();
 
     this.flagSystem.create();
     this.doorSystem.create();

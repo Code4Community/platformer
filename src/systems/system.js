@@ -12,7 +12,9 @@ export default class System {
   getComponentSpriteGroup(components) {
     const entityQuery = defineQuery(components);
     const entities = entityQuery(this.world);
-    const objects = entities.map((id) => this.scene.globalEntityMap.get(id));
+    const objects = entities.map((id) => {
+      return this.scene.globalEntityMap.get(id).object;
+    });
     return new Phaser.GameObjects.Group(this.scene, objects);
   }
 
@@ -22,7 +24,7 @@ export default class System {
     const entered = this.getEntered(this.world);
 
     entered.forEach((entityID) => {
-      const object = this.scene.globalEntityMap.get(entityID);
+      const object = this.scene.globalEntityMap.get(entityID).object;
       f(object);
     });
   }
@@ -33,14 +35,8 @@ export default class System {
     const entered = this.getAll(this.world);
 
     entered.forEach((entityID) => {
-      const object = this.scene.globalEntityMap.get(entityID);
+      const object = this.scene.globalEntityMap.get(entityID).object;
       f(object);
     });
-  }
-
-  getByName(name) {
-    return this.getAll(this.world)
-      .map((id) => this.scene.globalEntityMap.get(id))
-      .find((sprite) => sprite.name == name);
   }
 }

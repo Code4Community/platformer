@@ -11,12 +11,12 @@ export default class ECSScene extends Phaser.Scene {
     this.world = createWorld();
   }
 
-  setupMapAndCamera(tilesetName, key, layerID) {
-    // The following two strings are keys inside the json.
+  setupMapAndCamera() {
     const map = this.make.tilemap({ key: "map" });
-    const tileset = map.addTilesetImage(tilesetName, key);
+    // The following two strings are keys inside the json.
+    const tileset = map.addTilesetImage("smb-tileset", "mario-tiles");
 
-    this.layer = map.createLayer(layerID, tileset, 0, 0);
+    this.layer = map.createLayer("world", tileset, 0, 0);
     this.layer.setCollisionByProperty({ collides: true });
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -31,5 +31,17 @@ export default class ECSScene extends Phaser.Scene {
 
   addEntity(gameobject, components) {
     return new Entity(this, gameobject, components);
+  }
+
+  getByName(name) {
+    var result = null;
+
+    this.globalEntityMap.forEach((e) => {
+      if (e.object.name == name) {
+        result = e;
+      }
+    });
+
+    return result;
   }
 }

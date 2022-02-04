@@ -1,11 +1,26 @@
 import Phaser from "phaser";
 import System from "./system.js";
 
+import { createSpriteFromObject } from "../utils.js";
 import { Player } from "../components/player-components.js";
 
 class PlayerSystem extends System {
   constructor(scene) {
     super(scene, [Player]);
+  }
+
+  createSprites() {
+    const players = this.scene.map.filterObjects(
+      "Interactables",
+      (o) => o.type == "player"
+    );
+
+    players.forEach((player) => {
+      const sprite = createSpriteFromObject(this.scene, player, "dude");
+      this.scene.add.existing(sprite);
+      this.scene.physics.add.existing(sprite);
+      this.scene.addEntity(sprite, [Player]);
+    });
   }
 
   create() {
@@ -39,12 +54,10 @@ class PlayerSystem extends System {
     });
 
     this.forEnteredObjects((player) => {
-      player.setName("player");
       player.setDepth(1);
-      player.setBounce(0.2);
-      player.setCollideWorldBounds(true);
+      player.body.setBounce(0.2);
+      player.body.setCollideWorldBounds(true);
       player.body.setGravityY(300);
-      player.setDataEnabled();
 
       this.scene.physics.add.collider(player, this.scene.layer);
       this.scene.cameras.main.startFollow(player, false, 0.1, 0.1);
@@ -56,26 +69,24 @@ class PlayerSystem extends System {
   update() {
     this.forAllObjects((player) => {
       if (player.getData("celebrating")) {
-        player.setVelocityX(0);
+        player.body.setVelocityX(0);
         player.anims.play("turn");
-
         if (player.body.blocked.down) {
-          player.setVelocityY(-250);
+          player.body.setVelocityY(-250);
         }
       } else {
         if (this.cursors.left.isDown) {
-          player.setVelocityX(-160);
+          player.body.setVelocityX(-160);
           player.anims.play("left", true);
         } else if (this.cursors.right.isDown) {
-          player.setVelocityX(160);
+          player.body.setVelocityX(160);
           player.anims.play("right", true);
         } else {
-          player.setVelocityX(0);
+          player.body.setVelocityX(0);
           player.anims.play("turn");
         }
-
         if (this.cursors.up.isDown && player.body.blocked.down) {
-          player.setVelocityY(-350);
+          player.body.setVelocityY(-350);
         }
       }
     });
