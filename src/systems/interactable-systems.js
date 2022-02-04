@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import System from "./system.js";
+import eventsCenter from "../events-center.js";
 
 import { Player } from "../components/player-components.js";
 import { Enemy } from "../components/enemy-components.js";
@@ -70,7 +71,7 @@ class FlagSystem extends System {
 
     this.forEnteredObjects((flag) => {
       const flagTouchCallback = (o1, o2) => {
-        o1.scene.win();
+        eventsCenter.emit("win");
       };
 
       this.scene.physics.add.overlap(playerGroup, flag, flagTouchCallback);

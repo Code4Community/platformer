@@ -31,8 +31,6 @@ import {
   ButtonSystem,
 } from "../systems/interactable-systems.js";
 
-var willExit = false;
-
 export default class GameScene extends ECSScene {
   constructor() {
     super("game");
@@ -73,8 +71,6 @@ export default class GameScene extends ECSScene {
   }
 
   create() {
-    willExit = false;
-
     // systems
     this.flagSystem = new FlagSystem(this);
     this.playerSystem = new PlayerSystem(this);
@@ -124,9 +120,22 @@ export default class GameScene extends ECSScene {
 
     this.addEntity(player, [Player]);
     this.addEntity(hackableEntity, [Enemy, Hackable]);
+    eventsCenter.once("win", () => {
+      C4C.UI.popup({
+        mainScene: this,
+        uiScene: this.scene.get("ui"),
+        pausing: false,
+        text: "You Win!",
+        hasButton: false,
+      });
 
-    this.events.on("shutdown", () => {
-      resetWorld(this.world);
+      this.playerSystem.win();
+
+      this.time.addEvent({
+        delay: 2000,
+        callback: this.exit,
+        callbackScope: this,
+      });
     });
 
     this.flagSystem.createSprites();
@@ -151,29 +160,10 @@ export default class GameScene extends ECSScene {
   }
 
   exit() {
+    resetWorld(this.world);
     eventsCenter.destroy();
     this.scene.stop();
     this.scene.stop("ui");
     this.scene.start("level-select");
-  }
-
-  win() {
-    if (!willExit) {
-      this.time.addEvent({
-        delay: 2000,
-        callback: this.exit,
-        callbackScope: this,
-      });
-      willExit = true;
-    }
-
-    C4C.UI.popup({
-      mainScene: this,
-      uiScene: this.scene.get("ui"),
-      pausing: false,
-      text: "You Win!",
-      hasButton: false,
-    });
-    this.playerSystem.win();
   }
 }
