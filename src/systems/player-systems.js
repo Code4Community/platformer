@@ -38,9 +38,9 @@ class PlayerSystem extends System {
       repeat: 1,
     });
 
-    // This is only for creating a single player.
     this.forEnteredObjects((player) => {
       player.setName("player");
+      player.setDepth(1);
       player.setBounce(0.2);
       player.setCollideWorldBounds(true);
       player.body.setGravityY(300);

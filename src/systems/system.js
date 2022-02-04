@@ -37,4 +37,10 @@ export default class System {
       f(object);
     });
   }
+
+  getByName(name) {
+    return this.getAll(this.world)
+      .map((id) => this.scene.globalEntityMap.get(id))
+      .find((sprite) => sprite.name == name);
+  }
 }

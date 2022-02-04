@@ -12,6 +12,7 @@ class EnemySystem extends System {
     const spriteSheetName = "robot";
 
     this.forEnteredObjects((enemy) => {
+      enemy.setDepth(1);
       enemy.setBounce(0.2);
       enemy.setCollideWorldBounds(true);
       enemy.body.setGravityY(300);

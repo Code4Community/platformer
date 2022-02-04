@@ -13,9 +13,9 @@ function enterButtonRestState(btn) {
 var previousPosition = { x: 0, y: 0 };
 var previousTarget = null;
 
-function enableHackingUI(entity, scene, button) {
+function enableHackingUI(entity, mainScene, uiScene, button) {
   // Focus camera on entity.
-  const cam = scene.cameras.main;
+  const cam = mainScene.cameras.main;
   previousPosition = { x: cam.x, y: cam.y };
   previousTarget = cam._follow;
 
@@ -27,11 +27,11 @@ function enableHackingUI(entity, scene, button) {
   const ai = entity.getData("ai");
   C4C.Editor.setText(ai);
 
-  scene.input.keyboard.disableGlobalCapture();
+  mainScene.input.keyboard.disableGlobalCapture();
   C4C.Editor.Window.open();
 
   // Handle Button
-  const inTween = button.scene.tweens.add({
+  const inTween = uiScene.tweens.add({
     targets: button,
     x: {
       from: 800,
@@ -42,9 +42,9 @@ function enableHackingUI(entity, scene, button) {
   });
 }
 
-function disableHackingUI(entity, scene, button) {
+function disableHackingUI(entity, mainScene, uiScene, button) {
   // Return camera to original state.
-  const cam = scene.cameras.main;
+  const cam = mainScene.cameras.main;
   cam.zoomTo(2.5, 1000);
   cam.pan(
     previousPosition.x,
@@ -60,11 +60,11 @@ function disableHackingUI(entity, scene, button) {
   );
 
   // Handle Editor
-  scene.input.keyboard.enableGlobalCapture();
+  mainScene.input.keyboard.enableGlobalCapture();
   C4C.Editor.Window.close();
 
   // Handle Button
-  const outTween = button.scene.tweens.add({
+  const outTween = uiScene.tweens.add({
     targets: button,
     x: {
       from: 500,
@@ -90,11 +90,11 @@ export default class UIScene extends Phaser.Scene {
       .on("pointerout", () => enterButtonRestState(saveButton));
 
     eventsCenter.on("enterHackingMode", (entity, scene) => {
-      enableHackingUI(entity, scene, saveButton);
+      enableHackingUI(entity, scene, this, saveButton);
 
       // Handle Button
       saveButton.on("pointerdown", () => {
-        disableHackingUI(entity, scene, saveButton);
+        disableHackingUI(entity, scene, this, saveButton);
         eventsCenter.emit("exitHackingMode", entity, scene);
       });
     });

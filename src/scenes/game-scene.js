@@ -1,5 +1,6 @@
 import C4C from "c4c-editor-and-interpreter";
 import ECSScene from "./ecs-scene.js";
+import eventsCenter from "../events-center.js";
 import { resetWorld } from "bitecs";
 
 import skyImage from "../assets/sky.png";
@@ -87,6 +88,7 @@ export default class GameScene extends ECSScene {
 
     const player = this.physics.add.sprite(40, 150, "dude");
     const hackableEntity = this.physics.add.sprite(70, 40, "robot");
+    hackableEntity.setName("enemy");
 
     hackableEntity.setDataEnabled();
     hackableEntity.setData("ai", "jump");
@@ -104,7 +106,7 @@ export default class GameScene extends ECSScene {
 
     C4C.Interpreter.define("jump", function () {
       if (hackableEntity.body.blocked.down) {
-        hackableEntity.setVelocityY(-100);
+        hackableEntity.setVelocityY(-200);
       }
     });
 
@@ -127,10 +129,10 @@ export default class GameScene extends ECSScene {
       resetWorld(this.world);
     });
 
-    // These two are currently responsible for making the door and button game
-    // objects. If you had a hackable doors or buttons, these need to come
-    // before the hackable system. This will change when we abstract these into
-    // ecs-scene.
+    this.flagSystem.createSprites();
+    this.doorSystem.createSprites();
+    this.buttonSystem.createSprites();
+
     this.flagSystem.create();
     this.doorSystem.create();
     this.buttonSystem.create();
@@ -149,6 +151,7 @@ export default class GameScene extends ECSScene {
   }
 
   exit() {
+    eventsCenter.destroy();
     this.scene.stop();
     this.scene.stop("ui");
     this.scene.start("level-select");

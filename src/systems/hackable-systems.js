@@ -31,6 +31,7 @@ class HackableSystem extends System {
     eventsCenter.on("exitHackingMode", (entity, scene) => {
       if (entity.getData("hacked")) {
         entity.setData("ai", C4C.Editor.getText());
+        entity.setData("hacked", false);
         hasError = false;
       }
     });
