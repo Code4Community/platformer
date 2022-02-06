@@ -16,7 +16,8 @@ var previousTarget = null;
 function enableHackingUI(entity, mainScene, uiScene, button) {
   // Focus camera on entity.
   const cam = mainScene.cameras.main;
-  previousPosition = { x: cam.x, y: cam.y };
+  previousPosition.x = cam.centerX + cam.scrollX;
+  previousPosition.y = cam.centerY + cam.scrollY;
   previousTarget = cam._follow;
 
   cam.stopFollow();

@@ -6,27 +6,24 @@ import { Player } from "./components/player-components.js";
 import { Enemy } from "./components/enemy-components.js";
 import { Hackable } from "./components/hackable-components.js";
 
-import levelOneMap from "./assets/level-one.json";
+import levelOneMap from "./assets/levels/level-one.json";
+import levelTwoMap from "./assets/levels/level-two.json";
 
 class LevelOne extends GameScene {
   constructor() {
     // Right now this string must be identical to the class name. That could be
     // fixed but this is simplest for now.
     super("LevelOne");
+    this.tilemapKey = "map1";
     this.tilemapPath = levelOneMap;
   }
 
   levelCreate() {
-    const enemy = this.getByName("enemy1");
-    enemy.addComponent(Hackable);
-    enemy.object.setData("ai", "jump");
-    defineMovementFunctions(enemy.object);
-
     C4C.UI.popup({
       mainScene: this,
       uiScene: this.scene.get("ui"),
       pausing: true,
-      text: "Touch the blue square to win.",
+      text: "Move right. Touch the blue square to win.",
       hasButton: true,
     });
   }
@@ -37,7 +34,8 @@ class LevelTwo extends GameScene {
     // Right now this string must be identical to the class name. That could be
     // fixed but this is simplest for now.
     super("LevelTwo");
-    this.tilemapPath = levelOneMap;
+    this.tilemapKey = "map2";
+    this.tilemapPath = levelTwoMap;
   }
 
   levelCreate() {
@@ -50,11 +48,42 @@ class LevelTwo extends GameScene {
       mainScene: this,
       uiScene: this.scene.get("ui"),
       pausing: true,
-      text: "Now its level two.",
+      text: "Buttons control doors. You control robots.",
       hasButton: true,
     });
   }
 }
 
-const levels = [LevelOne, LevelTwo];
+class LevelThree extends GameScene {
+  constructor() {
+    // Right now this string must be identical to the class name. That could be
+    // fixed but this is simplest for now.
+    super("LevelThree");
+    this.tilemapKey = "map3";
+    this.tilemapPath = levelTwoMap;
+  }
+
+  levelCreate() {
+    const enemy = this.getByName("enemy1");
+    enemy.addComponent(Hackable);
+    enemy.object.setData(
+      "ai",
+      `// An if statement:
+if false
+  moveRight
+end`
+    );
+    defineMovementFunctions(enemy.object);
+
+    C4C.UI.popup({
+      mainScene: this,
+      uiScene: this.scene.get("ui"),
+      pausing: true,
+      text: "If statements!",
+      hasButton: true,
+    });
+  }
+}
+
+const levels = [LevelOne, LevelTwo, LevelThree];
 export default levels;

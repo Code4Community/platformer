@@ -12,7 +12,7 @@ export default class ECSScene extends Phaser.Scene {
   }
 
   setupMapAndCamera() {
-    const map = this.make.tilemap({ key: "map" });
+    const map = this.make.tilemap({ key: this.tilemapKey });
     // The following two strings are keys inside the json.
     const tileset = map.addTilesetImage("smb-tileset", "mario-tiles");
 

@@ -73,7 +73,7 @@ export default class GameScene extends ECSScene {
     });
 
     this.load.image("mario-tiles", marioTiles);
-    this.load.tilemapTiledJSON("map", this.tilemapPath);
+    this.load.tilemapTiledJSON(this.tilemapKey, this.tilemapPath);
   }
 
   create() {
