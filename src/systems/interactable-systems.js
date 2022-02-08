@@ -71,13 +71,13 @@ class DoorSystem extends System {
 
     this.scene.anims.create({
       key: "open",
-      frames: [{ key: spriteSheetName, frame: 2 }],
+      frames: [{ key: spriteSheetName, frame: 1 }],
       frameRate: 20,
     });
 
     this.scene.anims.create({
       key: "close",
-      frames: [{ key: spriteSheetName, frame: 1 }],
+      frames: [{ key: spriteSheetName, frame: 2 }],
       frameRate: 20,
     });
 
@@ -89,10 +89,10 @@ class DoorSystem extends System {
   update() {
     this.forAllObjects((door) => {
       if (door.state == 1) {
-        door.anims.play("close");
+        door.anims.play("open");
         door.body.checkCollision.none = true;
       } else {
-        door.anims.play("open");
+        door.anims.play("close");
         door.body.checkCollision.none = false;
       }
     });

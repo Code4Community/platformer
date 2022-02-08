@@ -8,6 +8,7 @@ import { Hackable } from "./components/hackable-components.js";
 
 import levelOneMap from "./assets/levels/level-one.json";
 import levelTwoMap from "./assets/levels/level-two.json";
+import levelThreeMap from "./assets/levels/level-three.json";
 
 class LevelOne extends GameScene {
   constructor() {
@@ -60,7 +61,7 @@ class LevelThree extends GameScene {
     // fixed but this is simplest for now.
     super("LevelThree");
     this.tilemapKey = "map3";
-    this.tilemapPath = levelTwoMap;
+    this.tilemapPath = levelThreeMap;
   }
 
   levelCreate() {
@@ -79,7 +80,7 @@ end`
       mainScene: this,
       uiScene: this.scene.get("ui"),
       pausing: true,
-      text: "If statements!",
+      text: "Hello welcome!Enjoy your game!",
       hasButton: true,
     });
   }

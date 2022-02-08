@@ -52,7 +52,7 @@ function defineMovementFunctions(entity) {
 
   C4C.Interpreter.define("jump", function () {
     if (entity.body.blocked.down) {
-      entity.body.setVelocityY(-200);
+      entity.body.setVelocityY(-300);
     }
   });
 
