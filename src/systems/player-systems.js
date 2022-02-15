@@ -58,7 +58,8 @@ class PlayerSystem extends System {
       player.body.setBounce(0.2);
       player.body.setCollideWorldBounds(true);
       player.body.setGravityY(300);
-
+      player.anims.play("turn");
+      
       this.scene.physics.add.collider(player, this.scene.layer);
       this.scene.cameras.main.startFollow(player, false, 0.1, 0.1);
     });
