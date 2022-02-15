@@ -9,6 +9,8 @@ import { Hackable } from "./components/hackable-components.js";
 import levelOneMap from "./assets/levels/level-one.json";
 import levelTwoMap from "./assets/levels/level-two.json";
 import levelThreeMap from "./assets/levels/level-three.json";
+import levelFourMap from  "./assets/levels/level-four.json";
+
 
 class LevelOne extends GameScene {
   constructor() {
@@ -84,7 +86,42 @@ end`
       hasButton: true,
     });
   }
+
+
+}
+class LevelFour extends GameScene {
+  constructor() {
+    // Right now this string must be identical to the class name. That could be
+    // fixed but this is simplest for now.
+    super("LevelFour");
+    this.tilemapKey = "map4";
+    this.tilemapPath = levelFourMap;
+  }
+
+  levelCreate() {
+    const enemy = this.getByName("enemy1");
+    enemy.addComponent(Hackable);
+    enemy.object.setData(
+      "ai",
+      `// type "moveRight","moveLeft","jump" 
+    // and click "save changes"
+      //type your instructions here:
+    // end
+      `
+    );
+    defineMovementFunctions(enemy.object);
+
+    C4C.UI.popup({
+      mainScene: this,
+      uiScene: this.scene.get("ui"),
+      pausing: true,
+      text: "Hello welcome!Begin a new journey!",
+      hasButton: true,
+    });
+  }
 }
 
-const levels = [LevelOne, LevelTwo, LevelThree];
+
+const levels = [LevelOne, LevelTwo, 
+  LevelThree,LevelFour];
 export default levels;
