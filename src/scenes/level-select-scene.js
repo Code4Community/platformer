@@ -32,12 +32,12 @@ export default class LevelSelectScene extends Phaser.Scene {
     });
 
     Phaser.Actions.GridAlign(levelButtonGroup.getChildren(), {
-      width: -1,
-      height: -1,
+      width: 3,
+      height: 2,
       cellWidth: 200,
-      cellHeight: 10,
+      cellHeight: 100,
       x: 200,
-      y: 100,
+      y: 200,
     });
   }
 
