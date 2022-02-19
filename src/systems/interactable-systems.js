@@ -122,7 +122,7 @@ class ButtonSystem extends System {
 
   create() {
     this.enemyGroup = this.getComponentSpriteGroup([Enemy]);
-    this.playerGroup =this.getComponentSpriteGroup([Player]);
+    this.playerGroup = this.getComponentSpriteGroup([Player]);
     const spriteSheetName = "button";
 
     this.scene.anims.create({
@@ -143,7 +143,10 @@ class ButtonSystem extends System {
       const doorID = button.getData("door");
       const associatedDoor = doorMap.get(doorID);
 
-      if (this.scene.physics.overlap(this.enemyGroup, button) || this.scene.physics.overlap(this.playerGroup,button)) {
+      if (
+        this.scene.physics.overlap(this.enemyGroup, button) ||
+        this.scene.physics.overlap(this.playerGroup, button)
+      ) {
         button.anims.play("down");
         associatedDoor.state = 1;
       } else {

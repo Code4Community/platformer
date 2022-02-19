@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 
 import skyImage from "../assets/sky.png";
-import levels from "../levels.js";
+import levelMap from "../levels.js";
 
 export default class LevelSelectScene extends Phaser.Scene {
   constructor() {
@@ -17,15 +17,15 @@ export default class LevelSelectScene extends Phaser.Scene {
 
     const levelButtonGroup = this.add.group();
 
-    levels.forEach((level) => {
-      const levelText = this.add.text(0, 0, level.name, {
+    Object.keys(levelMap).forEach((levelKey) => {
+      const levelText = this.add.text(0, 0, levelKey, {
         fontSize: "32px",
         fill: "#fff",
       });
 
       levelText.setInteractive();
       levelText.on("pointerdown", () => {
-        this.scene.start(level.name);
+        this.scene.start(levelKey);
       });
 
       levelButtonGroup.add(levelText);
