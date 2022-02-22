@@ -38,9 +38,9 @@ class FlagSystem extends System {
     });
   }
 
-  update() {}
+  update() { }
 
-  exit() {}
+  exit() { }
 }
 
 const doorMap = new Map();
@@ -68,6 +68,7 @@ class DoorSystem extends System {
   create() {
     const spriteSheetName = "door";
     const playerGroup = this.getComponentSpriteGroup([Player]);
+    const enemyGroup = this.getComponentSpriteGroup([Enemy]);
 
     this.scene.anims.create({
       key: "open",
@@ -83,6 +84,7 @@ class DoorSystem extends System {
 
     this.forEnteredObjects((door) => {
       this.scene.physics.add.collider(playerGroup, door);
+      this.scene.physics.add.collider(enemyGroup, door);
     });
   }
 
@@ -98,7 +100,7 @@ class DoorSystem extends System {
     });
   }
 
-  exit() {}
+  exit() { }
 }
 
 class ButtonSystem extends System {
@@ -156,7 +158,7 @@ class ButtonSystem extends System {
     });
   }
 
-  exit() {}
+  exit() { }
 }
 
 export { FlagSystem, DoorSystem, ButtonSystem };
