@@ -29,6 +29,9 @@ const config = {
   scene: [MainMenuScene, LevelSelectScene, UIScene].concat(
     Object.values(levelMap)
   ),
+  audio: {
+    disableWebAudio: false,
+  },
 };
 
 export default new Phaser.Game(config);
