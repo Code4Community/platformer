@@ -5,7 +5,7 @@ import { createSpriteFromObject } from "../utils.js";
 
 import { Player } from "../components/player-components.js";
 import { Enemy } from "../components/enemy-components.js";
-import { Flag, Door, Button } from "../components/interactable-components.js";
+import { Flag, Door, Button, Platform } from "../components/interactable-components.js";
 
 class FlagSystem extends System {
   constructor(scene) {
@@ -159,6 +159,41 @@ class ButtonSystem extends System {
   }
 
   exit() { }
+
 }
 
-export { FlagSystem, DoorSystem, ButtonSystem };
+class PlatformSystem extends System {
+  constructor(scene) {
+    super(scene, [Platform]);
+  }
+
+  createSprites() {
+    const platforms = this.scene.map.filterObjects(
+      "Interactables",
+      (o) => o.type == "platform"
+    );
+
+    platforms.forEach((platform) => {
+      const sprite = createSpriteFromObject(this.scene, platform, "platform");
+      this.scene.add.existing(sprite);
+      this.scene.physics.add.existing(sprite, true);
+      this.scene.addEntity(sprite, [Platform]);
+    });
+  }
+
+  create() {
+    const playerGroup = this.getComponentSpriteGroup([Player]);
+    const enemyGroup = this.getComponentSpriteGroup([Enemy]);
+
+    this.forEnteredObjects((platform) => {
+      this.scene.physics.add.collider(playerGroup, platform);
+      this.scene.physics.add.collider(enemyGroup, platform);
+    });
+  }
+
+  update() { }
+
+  exit() { }
+}
+
+export { FlagSystem, DoorSystem, ButtonSystem, PlatformSystem };

@@ -28,6 +28,7 @@ import {
   FlagSystem,
   DoorSystem,
   ButtonSystem,
+  PlatformSystem
 } from "../systems/interactable-systems.js";
 
 export default class GameScene extends ECSScene {
@@ -40,6 +41,7 @@ export default class GameScene extends ECSScene {
     this.hackableSystem = new HackableSystem(this);
     this.doorSystem = new DoorSystem(this);
     this.buttonSystem = new ButtonSystem(this);
+    this.platformSystem = new PlatformSystem(this);
   }
 
   preload() {
@@ -103,6 +105,7 @@ export default class GameScene extends ECSScene {
     this.buttonSystem.createSprites();
     this.playerSystem.createSprites();
     this.enemySystem.createSprites();
+    this.platformSystem.createSprites();
 
     this.levelCreate();
 

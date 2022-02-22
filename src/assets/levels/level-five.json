@@ -90,6 +90,24 @@
                  "width":32,
                  "x":240,
                  "y":240
+                }, 
+                {
+                 "gid":24,
+                 "height":16,
+                 "id":12,
+                 "name":"moving platform",
+                 "properties":[
+                        {
+                         "name":"x-distance",
+                         "type":"float",
+                         "value":5
+                        }],
+                 "rotation":0,
+                 "type":"platform",
+                 "visible":true,
+                 "width":32,
+                 "x":16,
+                 "y":240
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -98,7 +116,7 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":12,
+ "nextobjectid":15,
  "orientation":"orthogonal",
  "properties":[
         {
