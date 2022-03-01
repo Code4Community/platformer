@@ -28,5 +28,5 @@ export default class MainMenuScene extends Phaser.Scene {
     });
   }
 
-  update() {}
+  update() { }
 }
