@@ -5,7 +5,12 @@ import { createSpriteFromObject } from "../utils.js";
 
 import { Player } from "../components/player-components.js";
 import { Enemy } from "../components/enemy-components.js";
-import { Flag, Door, Button, Platform } from "../components/interactable-components.js";
+import {
+  Flag,
+  Door,
+  Button,
+  Platform,
+} from "../components/interactable-components.js";
 
 class FlagSystem extends System {
   constructor(scene) {
@@ -38,9 +43,9 @@ class FlagSystem extends System {
     });
   }
 
-  update() { }
+  update() {}
 
-  exit() { }
+  exit() {}
 }
 
 const doorMap = new Map();
@@ -100,7 +105,7 @@ class DoorSystem extends System {
     });
   }
 
-  exit() { }
+  exit() {}
 }
 
 class ButtonSystem extends System {
@@ -158,8 +163,7 @@ class ButtonSystem extends System {
     });
   }
 
-  exit() { }
-
+  exit() {}
 }
 
 class PlatformSystem extends System {
@@ -188,12 +192,23 @@ class PlatformSystem extends System {
     this.forEnteredObjects((platform) => {
       this.scene.physics.add.collider(playerGroup, platform);
       this.scene.physics.add.collider(enemyGroup, platform);
+
+      this.scene.tweens.add({
+        targets: platform,
+        x: {
+          value: 200,
+          duration: 1000,
+          ease: "Linear",
+          yoyo: -1,
+          repeat: -1,
+        },
+      });
     });
   }
 
-  update() { }
+  update() {}
 
-  exit() { }
+  exit() {}
 }
 
 export { FlagSystem, DoorSystem, ButtonSystem, PlatformSystem };
