@@ -102,7 +102,7 @@ class LevelFour extends GameScene {
     enemy.addComponent(Hackable);
     enemy.object.setData(
       "ai",
-      `// type "moveRight","moveLeft","jump" 
+      `// type "moveRight","moveLeft","jump"
     // and click "save changes"
       //type your instructions here:
     // end
@@ -134,7 +134,7 @@ class LevelFive extends GameScene {
     enemy.addComponent(Hackable);
     enemy.object.setData(
       "ai",
-      `// type "moveRight","moveLeft","jump" 
+      `// type "moveRight","moveLeft","jump"
     // and click "save changes"
       //type your instructions here:
     // end

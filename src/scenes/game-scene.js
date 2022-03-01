@@ -31,6 +31,7 @@ import {
   PlatformSystem
 } from "../systems/interactable-systems.js";
 
+const levelsDefeated = new Set();
 export default class GameScene extends ECSScene {
   constructor(key) {
     super(key);
@@ -83,6 +84,7 @@ export default class GameScene extends ECSScene {
     this.setupUI();
 
     eventsCenter.once("win", () => {
+      levelsDefeated.add(this.scene.scene.constructor.name)
       C4C.UI.popup({
         mainScene: this,
         uiScene: this.scene.get("ui"),
@@ -134,3 +136,4 @@ export default class GameScene extends ECSScene {
     this.scene.start("LevelSelect");
   }
 }
+export {levelsDefeated};
