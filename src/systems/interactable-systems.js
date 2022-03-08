@@ -11,6 +11,8 @@ import {
   Button,
   Platform,
 } from "../components/interactable-components.js";
+import { star } from "../components/star-components.js";
+
 
 class FlagSystem extends System {
   constructor(scene) {
@@ -43,9 +45,9 @@ class FlagSystem extends System {
     });
   }
 
-  update() {}
+  update() { }
 
-  exit() {}
+  exit() { }
 }
 
 const doorMap = new Map();
@@ -105,7 +107,7 @@ class DoorSystem extends System {
     });
   }
 
-  exit() {}
+  exit() { }
 }
 
 class ButtonSystem extends System {
@@ -163,7 +165,7 @@ class ButtonSystem extends System {
     });
   }
 
-  exit() {}
+  exit() { }
 }
 
 class PlatformSystem extends System {
@@ -216,9 +218,9 @@ class PlatformSystem extends System {
     });
   }
 
-  update() {}
+  update() { }
 
-  exit() {}
+  exit() { }
 }
 
-export { FlagSystem, DoorSystem, ButtonSystem, PlatformSystem };
+export { FlagSystem, DoorSystem, ButtonSystem, PlatformSystem, StarSystem };

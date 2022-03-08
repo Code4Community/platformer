@@ -12,6 +12,7 @@ import robotSpriteSheet from "../assets/robot.png";
 import doorSpriteSheet from "../assets/door.png";
 import buttonSpriteSheet from "../assets/button.png";
 import flagSpriteSheet from "../assets/flag.png";
+import platformSpriteSheet from "../assets/flag.png";
 import marioTiles from "../assets/mario-tiles.png";
 
 import { Enemy } from "../components/enemy-components.js";
@@ -75,6 +76,12 @@ export default class GameScene extends ECSScene {
       frameHeight: 32,
     });
 
+    this.load.spritesheet("platform", platformSpriteSheet, {
+      frameWidth: 32,
+      frameHeight: 16,
+    });
+
+
     this.load.image("mario-tiles", marioTiles);
     this.load.tilemapTiledJSON(this.tilemapKey, this.tilemapPath);
   }
@@ -137,4 +144,4 @@ export default class GameScene extends ECSScene {
     this.scene.start("LevelSelect");
   }
 }
-export {levelsDefeated};
+export { levelsDefeated };
