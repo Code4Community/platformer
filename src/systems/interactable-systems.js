@@ -180,7 +180,7 @@ class PlatformSystem extends System {
     platforms.forEach((platform) => {
       const sprite = createSpriteFromObject(this.scene, platform, "platform");
       this.scene.add.existing(sprite);
-      this.scene.physics.add.existing(sprite, true);
+      this.scene.physics.add.existing(sprite);
       this.scene.addEntity(sprite, [Platform]);
     });
   }
@@ -190,17 +190,27 @@ class PlatformSystem extends System {
     const enemyGroup = this.getComponentSpriteGroup([Enemy]);
 
     this.forEnteredObjects((platform) => {
+      platform.body.immovable = true;
+      platform.body.setFrictionX(1.0);
+      platform.body.setAllowGravity(false);
+
       this.scene.physics.add.collider(playerGroup, platform);
       this.scene.physics.add.collider(enemyGroup, platform);
 
-      this.scene.tweens.add({
-        targets: platform,
-        x: {
-          value: 200,
-          duration: 1000,
-          ease: "Linear",
-          yoyo: -1,
-          repeat: -1,
+      const startX = platform.body.position.x;
+
+      this.scene.tweens.addCounter({
+        from: 0,
+        to: platform.data.values["x-distance"] * 32,
+        duration: 1500,
+        ease: Phaser.Math.Easing.Linear,
+        repeat: -1,
+        yoyo: true,
+        onUpdate: (tween, target) => {
+          const x = startX + target.value;
+          const dx = x - platform.body.position.x;
+          platform.body.position.x = x;
+          platform.body.setVelocityX(dx);
         },
       });
     });

@@ -20,8 +20,6 @@ class EnemySystem extends System {
       this.scene.add.existing(sprite);
       this.scene.physics.add.existing(sprite);
       this.scene.addEntity(sprite, [Enemy]);
-
-      console.log("Added an enemy");
     });
   }
 
