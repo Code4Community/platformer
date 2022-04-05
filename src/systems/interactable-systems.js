@@ -11,7 +11,7 @@ import {
   Button,
   Platform,
 } from "../components/interactable-components.js";
-import { star } from "../components/star-components.js";
+import { Star, star } from "../components/star-components.js";
 
 
 class FlagSystem extends System {
@@ -222,5 +222,75 @@ class PlatformSystem extends System {
 
   exit() { }
 }
+
+
+class StarSystem extends System {
+  constructor(scene) {
+    super(scene, [Star]);
+  }
+
+  createSprites() {
+    const stars = this.scene.map.filterObjects(
+      "Stars",
+      (o) => o.type == "star"
+    );
+
+    console.log(stars);
+
+    stars.forEach((star) => {
+      const sprite = createSpriteFromObject(this.scene, star, "star");
+      this.scene.add.existing(sprite);
+      this.scene.physics.add.existing(sprite, true);
+      this.scene.addEntity(sprite, [Star]);
+
+    });
+  }
+
+  create() {
+    const playerGroup = this.getComponentSpriteGroup([Player]);
+    const enemyGroup = this.getComponentSpriteGroup([Enemy]);
+
+    this.forEnteredObjects((star) => {
+      // this.scene.physics.add.collider(playerGroup, platform);
+      // this.scene.physics.add.collider(enemyGroup, platform);
+      // this.physics.add.collider(stars, platforms);
+
+      // star.body.immovable = true;
+      // star.body.setAllowGravity(false);
+
+      // disableBody: function (disableGameObject, hideGameObject) {
+      //   if (disableGameObject === undefined) { disableGameObject = false; }
+      //   if (hideGameObject === undefined) { hideGameObject = false; }
+
+      //   this.body.stop();
+
+      //   this.body.enable = false;
+
+      //   if (disableGameObject) {
+      //     this.body.gameObject.active = false;
+      //   }
+
+      //   if (hideGameObject) {
+      //     this.body.gameObject.visible = false;
+      //   }
+
+      //   return this;
+      // }
+
+      function collectStar(player, star) {
+        star.disableBody(true, true);
+      }
+
+      this.scene.physics.add.overlap(playerGroup, star, collectStar, null, this);
+
+    });
+  }
+
+  update() { }
+
+  exit() { }
+}
+
+
 
 export { FlagSystem, DoorSystem, ButtonSystem, PlatformSystem, StarSystem };

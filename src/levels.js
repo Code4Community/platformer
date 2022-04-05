@@ -10,7 +10,9 @@ import levelOneMap from "./assets/levels/level-one.json";
 import levelTwoMap from "./assets/levels/level-two.json";
 import levelThreeMap from "./assets/levels/level-three.json";
 import levelFourMap from "./assets/levels/level-four.json";
-import levelFiveMap from "./assets/levels/level-five.json"
+import levelFiveMap from "./assets/levels/level-five.json";
+import levelSixMap from "./assets/levels/level-six.json";
+
 
 class LevelOne extends GameScene {
   constructor() {
@@ -151,6 +153,38 @@ class LevelFive extends GameScene {
     });
   }
 }
+
+class LevelSix extends GameScene {
+  constructor() {
+    // Right now this string must be identical to the class name. That could be
+    // fixed but this is simplest for now.
+    super("LevelSix");
+    this.tilemapKey = "map6";
+    this.tilemapPath = levelSixMap;
+  }
+
+  levelCreate() {
+    const enemy = this.getByName("enemy1");
+    enemy.addComponent(Hackable);
+    enemy.object.setData(
+      "ai",
+      `// type "moveRight","moveLeft","jump"
+    // and click "save changes"
+      //type your instructions here:
+    // end
+      `
+    );
+    defineMovementFunctions(enemy.object);
+
+    C4C.UI.popup({
+      mainScene: this,
+      uiScene: this.scene.get("ui"),
+      pausing: true,
+      text: "Hello welcome!Begin a new journey!",
+      hasButton: true,
+    });
+  }
+}
 // I know... too much boilerplate
 const levelMap = {
   LevelOne: LevelOne,
@@ -158,6 +192,7 @@ const levelMap = {
   LevelThree: LevelThree,
   LevelFour: LevelFour,
   LevelFive: LevelFive,
+  LevelSix: LevelSix,
 };
 
 export default levelMap;
