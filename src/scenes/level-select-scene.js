@@ -16,7 +16,7 @@ export default class LevelSelectScene extends Phaser.Scene {
     this.add.image(400, 300, "sky");
 
     const levelButtonGroup = this.add.group();
-    /*  Manage auth to select levels only after defeating previous level
+    /*  Manage auth to select levels only after defeating previous level */
     let currentLevel = 0;
     Object.keys(levelMap).forEach((levelKey) => {
           if(currentLevel <= levelsDefeated.size) {
@@ -38,8 +38,7 @@ export default class LevelSelectScene extends Phaser.Scene {
           }
           currentLevel+=1;
     });
-    */
-
+    /*
     Object.keys(levelMap).forEach((levelKey) => {
           const levelText = this.add.text(0, 0, levelKey, {
             fontSize: "32px",
@@ -51,7 +50,7 @@ export default class LevelSelectScene extends Phaser.Scene {
           });
           levelButtonGroup.add(levelText);
     });
-
+    */
     Phaser.Actions.GridAlign(levelButtonGroup.getChildren(), {
       width: 3,
       height: 2,

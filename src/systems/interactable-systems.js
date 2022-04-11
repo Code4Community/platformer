@@ -231,7 +231,7 @@ class StarSystem extends System {
 
   createSprites() {
     const stars = this.scene.map.filterObjects(
-      "Stars",
+      "Interactables",
       (o) => o.type == "star"
     );
 
@@ -277,11 +277,6 @@ class StarSystem extends System {
       //   return this;
       // }
 
-      function collectStar(player, star) {
-        star.disableBody(true, true);
-      }
-
-      this.scene.physics.add.overlap(playerGroup, star, collectStar, null, this);
 
     });
   }
