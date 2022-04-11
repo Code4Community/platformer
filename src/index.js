@@ -8,7 +8,7 @@ import levelMap from "./levels.js";
 
 import "./css/style.css";
 
-C4C.Editor.create(document.body, true);
+C4C.Editor.create(document.body, null, true);
 
 const config = {
   parent: "body",
