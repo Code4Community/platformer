@@ -1,4 +1,5 @@
 # Platforming Game
+Platformer is a coding game designed with our C4C language to help grade school students learn the basics of computer science.
 
 ## Getting Started
 
