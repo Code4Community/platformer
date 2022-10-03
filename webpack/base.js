@@ -6,10 +6,8 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 module.exports = {
   mode: "development",
   devtool: "eval-source-map",
-  devServer: {
-    watchOptions: {
-      ignored: ["**/.*"],
-    },
+  watchOptions: {
+    ignored: ["**/.*"],
   },
   module: {
     rules: [
@@ -26,15 +24,15 @@ module.exports = {
       },
       {
         test: [/\.vert$/, /\.frag$/],
-        use: "raw-loader",
+        type: "asset/source",
       },
       {
         test: /\.(gif|png|jpe?g|svg|xml)$/i,
-        use: "file-loader",
+        type: "asset/resource",
       },
       {
         test: /\.(ogg|mp3|wav|mpe?g)$/i,
-        use: "file-loader",
+        type: "asset/resource",
       },
     ],
   },
