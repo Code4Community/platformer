@@ -7,6 +7,23 @@ import { Hackable } from "../components/hackable-components.js";
 
 let hasError = false;
 
+var isPaused = false;
+var pauseTime = 0.0;
+var length = 1000.0;
+var result = [];
+var location = [];
+
+function pause(time) {
+  isPaused = true;
+  pauseTime = time;
+}
+
+function checkPause(time) {
+  if (time - pauseTime > length) {
+    isPaused = false;
+  }
+}
+
 class HackableSystem extends System {
   constructor(scene) {
     super(scene, [Hackable]);
@@ -33,6 +50,7 @@ class HackableSystem extends System {
         entity.setData("ai", C4C.Editor.getText());
         entity.setData("hacked", false);
         hasError = false;
+        location = [];
       }
     });
   }
@@ -41,11 +59,26 @@ class HackableSystem extends System {
     this.forAllObjects((o) => {
       // Could be replaced with a map.
       const ai = o.getData("ai");
+      const ast = C4C.Interpreter.iRead(ai);
+      const localEnv = o.getData("namespace");
 
       if (!hasError) {
         try {
-          C4C.Interpreter.run(ai);
+          const time = this.scene.time.now;
+
+          if (isPaused) {
+            checkPause(time);
+          } else {
+            [result, location] = C4C.Interpreter.stepRunInNamespace(
+              localEnv,
+              ai,
+              location
+            );
+
+            pause(time);
+          }
         } catch (err) {
+          console.log(err);
           alert(err + " Oops.");
           hasError = true;
 

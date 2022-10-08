@@ -13,7 +13,6 @@ import levelFourMap from "./assets/levels/level-four.json";
 import levelFiveMap from "./assets/levels/level-five.json";
 import levelSixMap from "./assets/levels/level-six.json";
 
-
 class LevelOne extends GameScene {
   constructor() {
     // Right now this string must be identical to the class name. That could be
@@ -46,7 +45,16 @@ class LevelTwo extends GameScene {
   levelCreate() {
     const enemy = this.getByName("enemy1");
     enemy.addComponent(Hackable);
-    enemy.object.setData("ai", "jump");
+    enemy.object.setData(
+      "ai",
+      `forever times
+  if true
+    jump
+    moveRight
+    moveLeft
+  end
+end`
+    );
     defineMovementFunctions(enemy.object);
 
     C4C.UI.popup({
@@ -169,9 +177,9 @@ class LevelSix extends GameScene {
     enemy.object.setData(
       "ai",
       `// type "moveRight","moveLeft","jump"
-    // and click "save changes"
-      //type your instructions here:
-    // end
+// and click "save changes"
+//type your instructions here:
+moveRight
       `
     );
     defineMovementFunctions(enemy.object);
