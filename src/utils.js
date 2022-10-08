@@ -42,23 +42,27 @@ function createSpriteFromObject(scene, obj, texture) {
 }
 
 function defineMovementFunctions(entity) {
-  C4C.Interpreter.define("moveLeft", function () {
+  const localEnv = C4C.Interpreter.createNamespace();
+
+  C4C.Interpreter.defineInNamespace(localEnv, "moveLeft", function () {
     entity.body.setVelocityX(-40);
   });
 
-  C4C.Interpreter.define("moveRight", function () {
+  C4C.Interpreter.defineInNamespace(localEnv, "moveRight", function () {
     entity.body.setVelocityX(40);
   });
 
-  C4C.Interpreter.define("jump", function () {
+  C4C.Interpreter.defineInNamespace(localEnv, "jump", function () {
     if (entity.body.blocked.down) {
       entity.body.setVelocityY(-300);
     }
   });
 
-  C4C.Interpreter.define("isOnGround", function () {
+  C4C.Interpreter.defineInNamespace(localEnv, "isOnGround", function () {
     return entity.body.blocked.down;
   });
+
+  entity.setData("namespace", localEnv);
 }
 
 export { createSpriteFromObject, defineMovementFunctions };
