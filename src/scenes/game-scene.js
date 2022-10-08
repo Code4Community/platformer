@@ -29,7 +29,7 @@ import {
   DoorSystem,
   ButtonSystem,
   PlatformSystem,
-  StarSystem
+  StarSystem,
 } from "../systems/interactable-systems.js";
 
 const levelsDefeated = new Set();
@@ -82,7 +82,6 @@ export default class GameScene extends ECSScene {
       frameHeight: 16,
     });
 
-
     this.load.image("mario-tiles", marioTiles);
     this.load.tilemapTiledJSON(this.tilemapKey, this.tilemapPath);
   }
@@ -92,7 +91,7 @@ export default class GameScene extends ECSScene {
     this.setupUI();
 
     eventsCenter.once("win", () => {
-      levelsDefeated.add(this.scene.scene.constructor.name)
+      levelsDefeated.add(this.scene.scene.constructor.name);
       C4C.UI.popup({
         mainScene: this,
         uiScene: this.scene.get("ui"),
