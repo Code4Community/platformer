@@ -72,6 +72,9 @@ class HackableSystem extends System {
         }
       } else {
         try {
+          o.body.setVelocityX(0);
+          o.body.setVelocityY(0);
+
           [result, location] = C4C.Interpreter.stepRunInNamespace(
             localEnv,
             ai,
@@ -82,7 +85,7 @@ class HackableSystem extends System {
         } catch (err) {
           console.log(err);
           alert(err + " Oops.");
-          locked = true;
+          isLocked = true;
 
           o.body.setVelocityX(0);
           o.body.setVelocityY(0);
