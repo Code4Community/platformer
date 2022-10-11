@@ -5,13 +5,13 @@ import eventsCenter from "../events-center.js";
 
 import { Hackable } from "../components/hackable-components.js";
 
-let hasError = false;
+let isPaused = false;
+let isLocked = false;
 
-var isPaused = false;
-var pauseTime = 0.0;
-var length = 1000.0;
-var result = [];
-var location = [];
+let pauseTime = 0.0;
+let length = 1000.0;
+let location = [];
+let result = [];
 
 function pause(time) {
   isPaused = true;
@@ -41,6 +41,7 @@ class HackableSystem extends System {
         if (!o.getData("hacked")) {
           eventsCenter.emit("enterHackingMode", o, o.scene);
           o.setData("hacked", true);
+          isLocked = true;
         }
       });
     });
@@ -49,7 +50,7 @@ class HackableSystem extends System {
       if (entity.getData("hacked")) {
         entity.setData("ai", C4C.Editor.getText());
         entity.setData("hacked", false);
-        hasError = false;
+        isLocked = false;
         location = [];
       }
     });
@@ -57,30 +58,31 @@ class HackableSystem extends System {
 
   update() {
     this.forAllObjects((o) => {
+      const time = this.scene.time.now;
       // Could be replaced with a map.
       const ai = o.getData("ai");
-      const ast = C4C.Interpreter.iRead(ai);
       const localEnv = o.getData("namespace");
 
-      if (!hasError) {
+      if (isPaused) {
+        if (!isLocked) {
+          checkPause(time);
+        } else {
+          o.body.setVelocityX(0);
+          o.body.setVelocityY(0);
+        }
+      } else {
         try {
-          const time = this.scene.time.now;
+          [result, location] = C4C.Interpreter.stepRunInNamespace(
+            localEnv,
+            ai,
+            location
+          );
 
-          if (isPaused) {
-            checkPause(time);
-          } else {
-            [result, location] = C4C.Interpreter.stepRunInNamespace(
-              localEnv,
-              ai,
-              location
-            );
-
-            pause(time);
-          }
+          pause(time);
         } catch (err) {
           console.log(err);
           alert(err + " Oops.");
-          hasError = true;
+          locked = true;
 
           o.body.setVelocityX(0);
           o.body.setVelocityY(0);
