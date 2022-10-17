@@ -52,6 +52,20 @@ function defineMovementFunctions(entity) {
     entity.body.setVelocityX(40);
   });
 
+  C4C.Interpreter.defineInNamespace(localEnv, "jumpLeft", function () {
+    if (entity.body.blocked.down) {
+      entity.body.setVelocityY(-300);
+    }
+    entity.body.setVelocityX(-40);
+  });
+
+  C4C.Interpreter.defineInNamespace(localEnv, "jumpRight", function () {
+    if (entity.body.blocked.down) {
+      entity.body.setVelocityY(-300);
+    }
+    entity.body.setVelocityX(40);
+  });
+
   C4C.Interpreter.defineInNamespace(localEnv, "jump", function () {
     if (entity.body.blocked.down) {
       entity.body.setVelocityY(-300);
