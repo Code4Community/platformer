@@ -85,6 +85,7 @@ class HackableSystem extends System {
         } catch (err) {
           console.log(err);
           alert(err + " Oops.");
+          isPaused = true;
           isLocked = true;
 
           o.body.setVelocityX(0);
