@@ -12,7 +12,7 @@ import robotSpriteSheet from "../assets/robot.png";
 import doorSpriteSheet from "../assets/door.png";
 import buttonSpriteSheet from "../assets/button.png";
 import flagSpriteSheet from "../assets/flag.png";
-import platformSpriteSheet from "../assets/flag.png";
+import platformSpriteSheet from "../assets/platform.png";
 import marioTiles from "../assets/mario-tiles.png";
 
 import { Enemy } from "../components/enemy-components.js";
