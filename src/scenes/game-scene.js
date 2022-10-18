@@ -24,6 +24,7 @@ import { Door, Button } from "../components/interactable-components.js";
 import { EnemySystem } from "../systems/enemy-systems.js";
 import { PlayerSystem } from "../systems/player-systems.js";
 import { HackableSystem } from "../systems/hackable-systems.js";
+import { TutorialSystem } from "../systems/tutotial-systems.js";
 import {
   FlagSystem,
   DoorSystem,
@@ -45,6 +46,7 @@ export default class GameScene extends ECSScene {
     this.buttonSystem = new ButtonSystem(this);
     this.platformSystem = new PlatformSystem(this);
     this.starSystem = new StarSystem(this);
+    this.tutorialSystem = new TutorialSystem(this);
   }
 
   preload() {
@@ -117,6 +119,7 @@ export default class GameScene extends ECSScene {
     this.enemySystem.createSprites();
     this.platformSystem.createSprites();
     this.starSystem.createSprites();
+    this.tutorialSystem.createSprites();
 
     this.levelCreate();
 
@@ -128,6 +131,7 @@ export default class GameScene extends ECSScene {
     this.hackableSystem.create();
     this.platformSystem.create();
     this.starSystem.create();
+    this.tutorialSystem.create();
   }
 
   update() {
@@ -138,6 +142,7 @@ export default class GameScene extends ECSScene {
     this.enemySystem.update();
     this.hackableSystem.update();
     this.starSystem.update();
+    this.tutorialSystem.update();
   }
 
   exit() {
