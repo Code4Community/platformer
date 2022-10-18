@@ -10,4 +10,6 @@ const Flag = defineComponent();
 
 const Platform = defineComponent();
 
-export { Flag, Door, Button, Platform };
+const Text = defineComponent();
+
+export { Flag, Door, Button, Platform, Text };
