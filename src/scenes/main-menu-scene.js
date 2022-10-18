@@ -19,6 +19,10 @@ export default class MainMenuScene extends Phaser.Scene {
 
     this.add.image(400, 300, "sky");
 
+    this.title = this.add.text(140, 200, "Super Maricode", {
+      fontSize: "64px",
+    });
+
     this.playText = this.add.text(200, 300, "click me to play game", {
       fontSize: "32px",
     });
