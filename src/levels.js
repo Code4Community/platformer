@@ -92,7 +92,7 @@ end`
       mainScene: this,
       uiScene: this.scene.get("ui"),
       pausing: true,
-      text: "Hello welcome!Enjoy your game!",
+      text: "Hello, welcome! Enjoy your game!",
       hasButton: true,
     });
   }
@@ -195,6 +195,12 @@ moveRight
 }
 // I know... too much boilerplate
 const levelMap = {
+  // "1": LevelOne,
+  // "2": LevelTwo,
+  // "3": LevelThree,
+  // "4": LevelFour,
+  // "5": LevelFive,
+  // "6": LevelSix,
   LevelOne: LevelOne,
   LevelTwo: LevelTwo,
   LevelThree: LevelThree,
