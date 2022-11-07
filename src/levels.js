@@ -48,11 +48,7 @@ class LevelTwo extends GameScene {
     enemy.object.setData(
       "ai",
       `forever times
-  if true
-    jump
-    moveRight
-    moveLeft
-  end
+  jump
 end`
     );
     defineMovementFunctions(enemy.object);
@@ -79,20 +75,14 @@ class LevelThree extends GameScene {
   levelCreate() {
     const enemy = this.getByName("enemy1");
     enemy.addComponent(Hackable);
-    enemy.object.setData(
-      "ai",
-      `// An if statement:
-if false
-  moveRight
-end`
-    );
+    enemy.object.setData("ai", ``);
     defineMovementFunctions(enemy.object);
 
     C4C.UI.popup({
       mainScene: this,
       uiScene: this.scene.get("ui"),
       pausing: true,
-      text: "Hello, welcome! Enjoy your game!",
+      text: "Try to 'jumpRight'!",
       hasButton: true,
     });
   }
@@ -110,21 +100,14 @@ class LevelFour extends GameScene {
   levelCreate() {
     const enemy = this.getByName("enemy1");
     enemy.addComponent(Hackable);
-    enemy.object.setData(
-      "ai",
-      `// type "moveRight","moveLeft","jump"
-    // and click "save changes"
-      //type your instructions here:
-    // end
-      `
-    );
+    enemy.object.setData("ai", ``);
     defineMovementFunctions(enemy.object);
 
     C4C.UI.popup({
       mainScene: this,
       uiScene: this.scene.get("ui"),
       pausing: true,
-      text: "Hello welcome!Begin a new journey!",
+      text: "You can open doors too!",
       hasButton: true,
     });
   }
@@ -142,23 +125,8 @@ class LevelFive extends GameScene {
   levelCreate() {
     const enemy = this.getByName("enemy1");
     enemy.addComponent(Hackable);
-    enemy.object.setData(
-      "ai",
-      `// type "moveRight","moveLeft","jump"
-    // and click "save changes"
-      //type your instructions here:
-    // end
-      `
-    );
+    enemy.object.setData("ai", ``);
     defineMovementFunctions(enemy.object);
-
-    C4C.UI.popup({
-      mainScene: this,
-      uiScene: this.scene.get("ui"),
-      pausing: true,
-      text: "Hello welcome!Begin a new journey!",
-      hasButton: true,
-    });
   }
 }
 
@@ -174,23 +142,8 @@ class LevelSix extends GameScene {
   levelCreate() {
     const enemy = this.getByName("enemy1");
     enemy.addComponent(Hackable);
-    enemy.object.setData(
-      "ai",
-      `// type "moveRight","moveLeft","jump"
-// and click "save changes"
-//type your instructions here:
-moveRight
-      `
-    );
+    enemy.object.setData("ai", ``);
     defineMovementFunctions(enemy.object);
-
-    C4C.UI.popup({
-      mainScene: this,
-      uiScene: this.scene.get("ui"),
-      pausing: true,
-      text: "Hello welcome!Begin a new journey!",
-      hasButton: true,
-    });
   }
 }
 // I know... too much boilerplate
