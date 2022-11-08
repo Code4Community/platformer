@@ -19,7 +19,8 @@ export default class MainMenuScene extends Phaser.Scene {
 
     this.add.image(400, 300, "sky");
 
-    this.title = this.add.text(140, 200, "Super Maricode", {
+    this.title = this.add.text(200, 200, "🏃‍♂️🧅 vs. 🤖", {
+      // fontFamily: "",
       fontSize: "64px",
     });
 

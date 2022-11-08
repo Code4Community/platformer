@@ -84,7 +84,7 @@ function getLevelText(key, isActive) {
     case "LevelTwo":
       return isActive ? "Level 2: Robots!" : "Level 2";
     case "LevelThree":
-      return isActive? "Level 3: Climb The Mountain" : "Level 3";
+      return isActive ? "Level 3: Climb The Mountain" : "Level 3";
     case "LevelFour":
       return isActive ? "Level 4: Teamwork" : "Level 4";
     case "LevelFive":
