@@ -11,7 +11,7 @@ import "./css/style.css";
 C4C.Editor.create(document.body, null, true);
 
 const config = {
-  parent: "body",
+  parent: document.getElementById("gameContainer"),
   type: Phaser.AUTO,
   width: 800,
   height: 600,
