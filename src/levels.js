@@ -27,7 +27,7 @@ class LevelOne extends GameScene {
       mainScene: this,
       uiScene: this.scene.get("ui"),
       pausing: true,
-      text: "Move right. Touch the blue square to win.",
+      text: "Move right. Touch the star to win.",
       hasButton: true,
     });
   }

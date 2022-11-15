@@ -15,6 +15,7 @@ import flagSpriteSheet from "../assets/flag.png";
 import platformSpriteSheet from "../assets/platform.png";
 import marioTiles from "../assets/mario-tiles.png";
 
+
 import { Enemy } from "../components/enemy-components.js";
 import { Player } from "../components/player-components.js";
 import { Sprite } from "../components/phaser-components.js";
@@ -52,6 +53,9 @@ export default class GameScene extends ECSScene {
     this.load.image("ground", groundImage);
     this.load.image("star", starImage);
     this.load.image("bomb", bombImage);
+
+    this.load.audio("jump", [jump]);
+
     this.load.spritesheet("dude", dudeSpriteSheet, {
       frameWidth: 32,
       frameHeight: 48,

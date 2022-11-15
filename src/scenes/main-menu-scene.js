@@ -2,7 +2,7 @@ import Phaser from "phaser";
 
 import skyImage from "../assets/sky.png";
 import titleMP3 from "../assets/title.mp3";
-import titleOGG from "../assets/title.ogg";
+//import titleOGG from "../assets/title.ogg";
 
 export default class MainMenuScene extends Phaser.Scene {
   constructor() {
@@ -11,7 +11,7 @@ export default class MainMenuScene extends Phaser.Scene {
 
   preload() {
     this.load.image("sky", skyImage);
-    this.load.audio("title", [titleOGG, titleMP3]);
+    this.load.audio("title", [titleMP3]);
   }
 
   create() {
