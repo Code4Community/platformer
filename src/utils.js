@@ -1,6 +1,5 @@
 import C4C from "c4c-editor-and-interpreter";
-import jump from "../src/assets/star.wav";
-  
+
 function createSpriteFromObject(scene, obj, texture) {
   const sprite = new Phaser.GameObjects.Sprite(scene);
   sprite.setName(obj.name);
@@ -42,8 +41,6 @@ function createSpriteFromObject(scene, obj, texture) {
   return sprite;
 }
 
-
-
 function defineMovementFunctions(entity) {
   const localEnv = C4C.Interpreter.createNamespace();
 
@@ -72,8 +69,7 @@ function defineMovementFunctions(entity) {
   C4C.Interpreter.defineInNamespace(localEnv, "jump", function () {
     if (entity.body.blocked.down) {
       entity.body.setVelocityY(-300);
-      this.load.audio("jump", [jump]);
-      this.sound.play("jump", { loop: false });
+      entity.scene.sound.play("jump", { loop: false });
     }
   });
 
