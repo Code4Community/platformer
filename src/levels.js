@@ -1,4 +1,4 @@
-import C4C from "c4c-editor-and-interpreter";
+import C4C from "c4c-lib";
 import GameScene from "./scenes/game-scene.js";
 import { defineMovementFunctions } from "./utils.js";
 

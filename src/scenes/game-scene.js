@@ -1,4 +1,4 @@
-import C4C from "c4c-editor-and-interpreter";
+import C4C from "c4c-lib";
 import ECSScene from "./ecs-scene.js";
 import eventsCenter from "../events-center.js";
 import { resetWorld } from "bitecs";

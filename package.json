@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "bitecs": "^0.3.21-13",
-    "c4c-editor-and-interpreter": "file:../code-editor-and-interpreter",
+    "c4c-lib": "github:Code4Community/c4c-lib#0.1.0",
     "codemirror": "^5.63.3",
     "phaser": "^3.55.2"
   }

@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import C4C from "c4c-editor-and-interpreter";
+import C4C from "c4c-lib";
 
 import MainMenuScene from "./scenes/main-menu-scene.js";
 import LevelSelectScene from "./scenes/level-select-scene.js";

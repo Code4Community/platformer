@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import C4C from "c4c-editor-and-interpreter";
+import C4C from "c4c-lib";
 import System from "./system.js";
 import eventsCenter from "../events-center.js";
 
