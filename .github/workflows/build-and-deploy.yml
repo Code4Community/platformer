@@ -13,14 +13,15 @@ jobs:
           persist-credentials: false
       - name: Build
         run: |
+          npm install
           npm run build
       - name: Deploy
         env:
-          ACCESS_TOKEN: ${{ secrets.TOKEN }}
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           rm -f .gitignore
           git config --global user.email "tassos.manganaris@gmail.com"
-          git config --global user.name "Deployment User"
+          git config --global user.name "Deployment Runner"
           git add dist
           git status
           git commit -m 'build for deployment'
