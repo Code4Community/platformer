@@ -1,0 +1,29 @@
+name: Build and Deploy with Github Pages
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Build
+        run: |
+          npm install
+          npm run build
+      - name: Deploy
+        env:
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          rm -f .gitignore
+          git config --global user.email "tassos.manganaris@gmail.com"
+          git config --global user.name "Deployment Runner"
+          git add dist
+          git status
+          git commit -m 'build for deployment'
+          git remote set-url origin https://Tass0sm:${ACCESS_TOKEN}@github.com/Code4Community/platformer.git
+          git push origin `git subtree split --prefix dist master`:gh-pages --force
