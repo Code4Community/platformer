@@ -6,12 +6,12 @@ import LevelSelectScene from "./scenes/level-select-scene.js";
 import UIScene from "./scenes/ui-scene.js";
 import levelMap from "./levels.js";
 
-import "./css/style.css";
+import "c4c-lib/src/styles/style.scss";
 
 C4C.Editor.create(document.body, null, true);
 
 const config = {
-  parent: document.getElementById("gameContainer"),
+  parent: document.getElementById("game"),
   type: Phaser.AUTO,
   width: 800,
   height: 600,

@@ -1,28 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Code4Community Platformer</title>
-  </head>
-  <body>
-    <div id="gameContainer">
-        <p></p>
-    </div>
-    <div id="instructionsContainer">
-      <h2 style="padding:10px"><u>Hacking Commands:</u></h2>
-      <ul>
-          <li>moveLeft</li>
-          <li>moveRight</li>
-          <li>jumpLeft</li>
-          <li>jumpRight</li>
-          <li>jump</li>
-          <li>isOnGround</li>
-      </ul>
-      <h3 style="padding:10px">Looping:</h3>
-      <ul>
-          <li># times</li>
-          <li>forever times</li>
-      </ul>
-    </div>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Code4Community Platformer</title>
+    </head>
+    <body>
+        <nav class="c4c-navbar">
+            <div class="container d-flex flex-wrap justify-content-between">
+                <a class="nav navbar-brand">Platformer</a>
+            </div>
+        </nav>
+
+        <div class="c4c-container">
+            <div class="c4c-row">
+                <div class="c4c-disappearing-col">
+                    <h2><u>Hacking Commands:</u></h2>
+                    <ul>
+                        <li>moveLeft</li>
+                        <li>moveRight</li>
+                        <li>jumpLeft</li>
+                        <li>jumpRight</li>
+                        <li>jump</li>
+                        <li>isOnGround</li>
+                    </ul>
+                    <h3>Looping:</h3>
+                    <ul>
+                        <li># times</li>
+                        <li>forever times</li>
+                    </ul>
+                </div>
+
+                <div class="c4c-game" id="game"></div>
+            </div>
+        </div>
+    </body>
 </html>
